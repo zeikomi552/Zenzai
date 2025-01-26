@@ -1,0 +1,83 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Zenzai.ViewModels"
+             xmlns:Converters="clr-namespace:Zenzai.Common.Converters"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Zenzai.Views"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Class="Zenzai.Views.StoryCreator"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type={x:Type vm:StoryCreatorViewModel}}">
+    <UserControl.Resources>
+        <Converters:URLStringToImageSourceConverter x:Key="URLStringToImageSourceConverter"/>
+    </UserControl.Resources>
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:CallMethodAction TargetObject="{Binding}" MethodName="InitWebUI"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="送信メッセージ"/>
+                <TextBox Margin="5" Text="{Binding SendMessage}" Grid.Row="1"  Height="80" AcceptsReturn="True"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button Width="100" Command="{Binding ChatCommand}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" />
+                    <Button Width="100" Content="プロンプト" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="CreatePrompt"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <DataGrid CanUserAddRows="False" CanUserDeleteRows="True" Margin="5" ItemsSource="{Binding ChatHistory.Items}" Grid.Row="1"/>
+        </Grid>
+        <Grid Margin="5" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox AcceptsReturn="True" Margin="5" Height="100" Text="{Binding WebUI.Request.PromptItem.Prompt}"/>
+            <StackPanel Grid.Row="1">
+                <Button Margin="5" Content="起動">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction TargetObject="{Binding}" MethodName="ExecutePrompt"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+                <Button Margin="5" Content="停止">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction TargetObject="{Binding}" MethodName="CloseWebUI"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+            <TextBox Margin="5" Height="100" Grid.Row="2" IsReadOnly="True" Text="{Binding WebUI.RedirectMessage.OutputMessage, Mode=OneWay}"/>
+            <Image Margin="5" Grid.Row="3" Source="{Binding FilePath, Converter={StaticResource URLStringToImageSourceConverter}}">
+                
+            </Image>
+        </Grid>
+    </Grid>
+</UserControl>
