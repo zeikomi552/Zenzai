@@ -135,6 +135,11 @@ namespace Zenzai.ViewModels
             }
         }
         #endregion
+
+        #region 初期化処理
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
         public void Init()
         {
             try
@@ -146,7 +151,12 @@ namespace Zenzai.ViewModels
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        #endregion
 
+        #region ダイアログの表示
+        /// <summary>
+        /// ダイアログの表示
+        /// </summary>
         private void ShowDialog()
         {
             var message = "This is a message that should be shown in the dialog.";
@@ -163,7 +173,12 @@ namespace Zenzai.ViewModels
                 //    Title = "I Don't know what you did!?";
             });
         }
+        #endregion
 
+        #region チャット
+        /// <summary>
+        /// チャット
+        /// </summary>
         public async void Chat()
         {
             try
@@ -208,7 +223,12 @@ namespace Zenzai.ViewModels
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        #endregion
 
+        #region WebUIの初期化処理
+        /// <summary>
+        /// WebUIの初期化処理
+        /// </summary>
         public void InitWebUI()
         {
             try
@@ -220,11 +240,17 @@ namespace Zenzai.ViewModels
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        #endregion
 
+        #region プロンプトの作成処理
+        /// <summary>
+        /// プロンプトの作成処理
+        /// </summary>
         public async void ExecutePrompt()
         {
             var ret = await ExecutePromptSub();
         }
+        #endregion
 
         #region Promptの実行処理
         /// <summary>
@@ -257,9 +283,14 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
+        #region WebUIの終了処理
+        /// <summary>
+        /// WebUIの終了処理
+        /// </summary>
         public void CloseWebUI()
         {
             this.WebUI.WebUIProcessEnd();
         }
+        #endregion
     }
 }
