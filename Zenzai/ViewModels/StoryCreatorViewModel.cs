@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using Zenzai.Common.Utilities;
 using Zenzai.Models.A1111;
 using Zenzai.Models.Ollama;
+using Zenzai.Models.Zenzai;
 
 namespace Zenzai.ViewModels
 {
@@ -111,31 +112,6 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
-        #region ファイルパス[FilePath]プロパティ
-        /// <summary>
-        /// ファイルパス[FilePath]プロパティ用変数
-        /// </summary>
-        string _FilePath = string.Empty;
-        /// <summary>
-        /// ファイルパス[FilePath]プロパティ
-        /// </summary>
-        public string FilePath
-        {
-            get
-            {
-                return _FilePath;
-            }
-            set
-            {
-                if (_FilePath == null || !_FilePath.Equals(value))
-                {
-                    _FilePath = value;
-                    RaisePropertyChanged("FilePath");
-                }
-            }
-        }
-        #endregion
-
         #region 初期化処理
         /// <summary>
         /// 初期化処理
@@ -184,7 +160,7 @@ namespace Zenzai.ViewModels
             try
             {
                 this.ChatHistory.Items.Add(
-                    new OllapiMessage()
+                    new OllapiMessageEx()
                     {
                         Role = "user",
                         Content = this.SendMessage
@@ -193,7 +169,7 @@ namespace Zenzai.ViewModels
 
                 OllapiChatRequest test = new OllapiChatRequest("localhost", 11434, "example");
                 test.Open();
-                var ret = await test.Request(this.ChatHistory.Items.ToList());
+                var ret = await test.Request(this.ChatHistory.ToOllapiMessage());
 
                 int retry = 0;
                 while (retry < 10)
@@ -204,7 +180,7 @@ namespace Zenzai.ViewModels
 
                         if (tmp.Message != null)
                         {
-                            this.ChatHistory.Items.Add(tmp.Message);
+                            this.ChatHistory.Items.Add(new OllapiMessageEx( tmp.Message));
                             break;
                         }
                     }
@@ -268,9 +244,9 @@ namespace Zenzai.ViewModels
                 (ret, path_list) = await this.WebUI.Request.PostRequest(url, outdir, this.WebUI.Request.PromptItem);
 
 
-                if (path_list.Count > 0)
+                if (path_list.Count > 0 && this.ChatHistory.SelectedItem != null)
                 {
-                    this.FilePath = path_list.ElementAt(0);
+                    ((OllapiMessageEx)this.ChatHistory.SelectedItem).FilePath = path_list.ElementAt(0);
                 }
 
                 return true;

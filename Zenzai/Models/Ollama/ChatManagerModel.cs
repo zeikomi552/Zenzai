@@ -1,10 +1,12 @@
 ﻿using Ollapi.api;
+using Ollapi.Interface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zenzai.Models.Zenzai;
 
 namespace Zenzai.Models.Ollama
 {
@@ -14,11 +16,11 @@ namespace Zenzai.Models.Ollama
         /// <summary>
         /// チャット履歴
         /// </summary>
-        ObservableCollection<OllapiMessage> _Items = new ObservableCollection<OllapiMessage>();
+        ObservableCollection<OllapiMessageEx> _Items = new ObservableCollection<OllapiMessageEx>();
         /// <summary>
         /// チャット履歴
         /// </summary>
-        public ObservableCollection<OllapiMessage> Items
+        public ObservableCollection<OllapiMessageEx> Items
         {
             get
             {
@@ -39,11 +41,11 @@ namespace Zenzai.Models.Ollama
         /// <summary>
         /// 選択チャット
         /// </summary>
-        OllapiMessage _SelectedItem = new OllapiMessage();
+        OllapiMessageEx _SelectedItem = new OllapiMessageEx();
         /// <summary>
         /// 選択チャット
         /// </summary>
-        public OllapiMessage SelectedItem
+        public OllapiMessageEx SelectedItem
         {
             get
             {
@@ -57,6 +59,24 @@ namespace Zenzai.Models.Ollama
                     RaisePropertyChanged("SelectedItem");
                 }
             }
+        }
+        #endregion
+
+        #region List<OllapiMessage>に変換
+        /// <summary>
+        /// List<OllapiMessage>に変換
+        /// </summary>
+        /// <returns></returns>
+        public List<IOllapiMessage> ToOllapiMessage()
+        {
+            return (from x in _Items
+                      select new OllapiMessage()
+                      { 
+                          Content = x.Content,
+                          Role = x.Role,
+                          Images = x.Images,
+                      }).ToList<IOllapiMessage>();
+      
         }
         #endregion
     }

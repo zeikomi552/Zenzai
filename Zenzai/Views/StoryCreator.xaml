@@ -48,7 +48,7 @@
                 </StackPanel>
             </Grid>
 
-            <DataGrid CanUserAddRows="False" CanUserDeleteRows="True" Margin="5" ItemsSource="{Binding ChatHistory.Items}" Grid.Row="1"/>
+            <DataGrid CanUserAddRows="False" CanUserDeleteRows="True" Margin="5" ItemsSource="{Binding ChatHistory.Items}" SelectedItem="{Binding ChatHistory.SelectedItem}" Grid.Row="1"/>
         </Grid>
         <Grid Margin="5" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -75,7 +75,7 @@
                 </Button>
             </StackPanel>
             <TextBox Margin="5" Height="100" Grid.Row="2" IsReadOnly="True" Text="{Binding WebUI.RedirectMessage.OutputMessage, Mode=OneWay}"/>
-            <Image Margin="5" Grid.Row="3" Source="{Binding FilePath, Converter={StaticResource URLStringToImageSourceConverter}}">
+            <Image Margin="5" Grid.Row="3" Source="{Binding ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}">
                 
             </Image>
         </Grid>
