@@ -1,4 +1,6 @@
-﻿using Ollapi.api;
+﻿using DryIoc.ImTools;
+using MahApps.Metro.Converters;
+using Ollapi.api;
 using Ollapi.Common;
 using System;
 using System.Collections.Generic;
@@ -17,73 +19,48 @@ namespace Zenzai.ViewModels
 {
     public class StoryCreatorViewModel : BindableBase
     {
-        #region コマンド用
-        private DelegateCommand? _showDialogCommand;
-        public DelegateCommand ShowDialogCommand =>
-            _showDialogCommand ?? (_showDialogCommand = new DelegateCommand(ShowDialog));
-
-
-        private DelegateCommand? _ChatCommand;
-        public DelegateCommand ChatCommand =>
-            _ChatCommand ?? (_ChatCommand = new DelegateCommand(Chat));
-
+        #region 本アプリ操作用モデル
+        /// <summary>
+        /// 本アプリ操作用モデル
+        /// </summary>
+        ZenzaiManagerModel _ZenzaiManager = new ZenzaiManagerModel();
+        /// <summary>
+        /// 本アプリ操作用モデル
+        /// </summary>
+        public ZenzaiManagerModel ZenzaiManager
+        {
+            get
+            {
+                return _ZenzaiManager;
+            }
+            set
+            {
+                if (_ZenzaiManager == null || !_ZenzaiManager.Equals(value))
+                {
+                    _ZenzaiManager = value;
+                    RaisePropertyChanged("ZenzaiManager");
+                }
+            }
+        }
         #endregion
 
+        #region コマンド用
+        private DelegateCommand? _showDialogCommand;
+        public DelegateCommand ShowDialogCommand => _showDialogCommand ?? (_showDialogCommand = new DelegateCommand(ShowDialog));
+        private DelegateCommand? _ChatCommand;
+        public DelegateCommand ChatCommand => _ChatCommand ?? (_ChatCommand = new DelegateCommand(Chat));
+        #endregion
 
         private IDialogService _dialogService;
 
+        #region コンストラクタ
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="dialogService"></param>
         public StoryCreatorViewModel(IDialogService dialogService)
         {
             _dialogService = dialogService;
-        }
-
-        #region WebUIA1111用オブジェクト
-        /// <summary>
-        /// WebUIA1111用オブジェクト
-        /// </summary>
-        WebUIBaseModel _WebUI = new WebUIBaseModel();
-        /// <summary>
-        /// WebUIA1111用オブジェクト
-        /// </summary>
-        public WebUIBaseModel WebUI
-        {
-            get
-            {
-                return _WebUI;
-            }
-            set
-            {
-                if (_WebUI == null || !_WebUI.Equals(value))
-                {
-                    _WebUI = value;
-                    RaisePropertyChanged("WebUI");
-                }
-            }
-        }
-        #endregion
-
-        #region チャット履歴
-        /// <summary>
-        /// チャット履歴
-        /// </summary>
-        ChatManagerModel _ChatHistory = new ChatManagerModel();
-        /// <summary>
-        /// チャット履歴
-        /// </summary>
-        public ChatManagerModel ChatHistory
-        {
-            get
-            {
-                return _ChatHistory;
-            }
-            set
-            {
-                if (_ChatHistory == null || !_ChatHistory.Equals(value))
-                {
-                    _ChatHistory = value;
-                    RaisePropertyChanged("ChatHistory");
-                }
-            }
         }
         #endregion
 
@@ -120,7 +97,26 @@ namespace Zenzai.ViewModels
         {
             try
             {
-                InitWebUI();
+                // 初期化処理
+                this.ZenzaiManager.Initialize();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region チャット
+        /// <summary>
+        /// チャット
+        /// </summary>
+        public void Chat()
+        {
+            try
+            {
+                // 最初のチャット
+                this.ZenzaiManager.Chat(this.SendMessage);
             }
             catch (Exception e)
             {
@@ -148,124 +144,6 @@ namespace Zenzai.ViewModels
                 //else
                 //    Title = "I Don't know what you did!?";
             });
-        }
-        #endregion
-
-        #region チャット
-        /// <summary>
-        /// チャット
-        /// </summary>
-        public async void Chat()
-        {
-            try
-            {
-                this.ChatHistory.Items.Add(
-                    new OllapiMessageEx()
-                    {
-                        Role = "user",
-                        Content = this.SendMessage
-                    }
-                    );
-
-                OllapiChatRequest test = new OllapiChatRequest("localhost", 11434, "example");
-                test.Open();
-                var ret = await test.Request(this.ChatHistory.ToOllapiMessage());
-
-                int retry = 0;
-                while (retry < 10)
-                {
-                    try
-                    {
-                        var tmp = JSONUtil.DeserializeFromText<OllapiChatResponse>(ret);
-
-                        if (tmp.Message != null)
-                        {
-                            this.ChatHistory.Items.Add(new OllapiMessageEx( tmp.Message));
-                            break;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                    retry++;
-                }
-
-                test.Close();
-
-                this.SendMessage = string.Empty;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        #endregion
-
-        #region WebUIの初期化処理
-        /// <summary>
-        /// WebUIの初期化処理
-        /// </summary>
-        public void InitWebUI()
-        {
-            try
-            {
-                this.WebUI.ExecuteWebUI(@"C:\Work\stable-diffusion-webui");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        #endregion
-
-        #region プロンプトの作成処理
-        /// <summary>
-        /// プロンプトの作成処理
-        /// </summary>
-        public async void ExecutePrompt()
-        {
-            var ret = await ExecutePromptSub();
-        }
-        #endregion
-
-        #region Promptの実行処理
-        /// <summary>
-        /// Promptの実行処理
-        /// </summary>
-        private async Task<bool> ExecutePromptSub()
-        {
-            try
-            {
-                string url = "http://127.0.0.1:7861";
-                string outdir = @"C:\output";
-                List<string> path_list = new List<string>();
-                bool ret = false;
-
-                (ret, path_list) = await this.WebUI.Request.PostRequest(url, outdir, this.WebUI.Request.PromptItem);
-
-
-                if (path_list.Count > 0 && this.ChatHistory.SelectedItem != null)
-                {
-                    ((OllapiMessageEx)this.ChatHistory.SelectedItem).FilePath = path_list.ElementAt(0);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ShowMessage.ShowErrorOK(ex.Message, "Error");
-                return false;
-            }
-        }
-        #endregion
-
-        #region WebUIの終了処理
-        /// <summary>
-        /// WebUIの終了処理
-        /// </summary>
-        public void CloseWebUI()
-        {
-            this.WebUI.WebUIProcessEnd();
         }
         #endregion
     }

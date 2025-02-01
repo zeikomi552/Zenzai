@@ -14,70 +14,39 @@
     </UserControl.Resources>
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
-            <b:CallMethodAction TargetObject="{Binding}" MethodName="InitWebUI"/>
+            <b:CallMethodAction TargetObject="{Binding}" MethodName="Init"/>
         </b:EventTrigger>
     </b:Interaction.Triggers>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+            <Image Margin="5" Source="{Binding ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}" Grid.RowSpan="2"/>
 
-            <Grid>
+            <Grid Margin="5" Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="送信メッセージ"/>
-                <TextBox Margin="5" Text="{Binding SendMessage}" Grid.Row="1"  Height="80" AcceptsReturn="True"/>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <Button Width="100" Command="{Binding ChatCommand}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" />
-                    <Button Width="100" Content="プロンプト" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="Click">
-                                <b:CallMethodAction TargetObject="{Binding}" MethodName="CreatePrompt"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                    </Button>
-                </StackPanel>
+                <TextBlock TextWrapping="Wrap"
+                           Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
+                <TextBlock TextWrapping="Wrap" Grid.Row="1"
+                           Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
             </Grid>
-
-            <DataGrid CanUserAddRows="False" CanUserDeleteRows="True" Margin="5" ItemsSource="{Binding ChatHistory.Items}" SelectedItem="{Binding ChatHistory.SelectedItem}" Grid.Row="1"/>
         </Grid>
-        <Grid Margin="5" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBox AcceptsReturn="True" Margin="5" Height="100" Text="{Binding WebUI.Request.PromptItem.Prompt}"/>
-            <StackPanel Grid.Row="1">
-                <Button Margin="5" Content="起動">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="Click">
-                            <b:CallMethodAction TargetObject="{Binding}" MethodName="ExecutePrompt"/>
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </Button>
-                <Button Margin="5" Content="停止">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="Click">
-                            <b:CallMethodAction TargetObject="{Binding}" MethodName="CloseWebUI"/>
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </Button>
-            </StackPanel>
-            <TextBox Margin="5" Height="100" Grid.Row="2" IsReadOnly="True" Text="{Binding WebUI.RedirectMessage.OutputMessage, Mode=OneWay}"/>
-            <Image Margin="5" Grid.Row="3" Source="{Binding ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}">
-                
-            </Image>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="5" Text="{Binding SendMessage}" Grid.Row="1"  Height="80" AcceptsReturn="True"/>
+            <Button Grid.Column="1" Width="100" Command="{Binding ChatCommand}" Content="送信" Margin="5" />
         </Grid>
     </Grid>
 </UserControl>
