@@ -1,14 +1,17 @@
 ﻿using Ollapi.api;
 using Ollapi.Common;
+using Ollapi.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 using Zenzai.Common.Utilities;
 using Zenzai.Models.A1111;
 using Zenzai.Models.Ollama;
+using static MaterialDesignThemes.Wpf.Theme.ToolBar;
 
 namespace Zenzai.Models.Zenzai
 {
@@ -150,22 +153,39 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                this.ChatHistory.Items.Add(
-                    new OllapiMessageEx()
+                // メッセージ送信用リストの作成
+                List<IOllapiMessage> list = new List<IOllapiMessage>();
+
+                foreach (var element in this.ChatHistory.Items)
+                {
+                    list.Add(new OllapiMessage()
                     {
-                        Role = this.Role,
-                        Content = message
+                        Content = element.Content,
+                        Role = element.Role,
+                        Images = element.Images,
                     });
+                }
+
+                list.Add(new OllapiMessage()
+                {
+                    Role = this.Role,
+                    Content = message,
+                });
 
                 // Ollapiの起動
                 OllapiChatRequest ollapi = new OllapiChatRequest(this.OllapiHost, this.OllapiPort, this.OllapiModel);
-                ollapi.Open();  // 接続
-                var ret = await ollapi.Request(this.ChatHistory.ToOllapiMessage()); // リクエストの実行
+
+                // 接続
+                ollapi.Open();
+
+                // リクエストの実行
+                var ret = await ollapi.Request(list);
 
                 // メッセージの展開
                 var tmp = JSONUtil.DeserializeFromText<OllapiChatResponse>(ret);
 
-                ollapi.Close(); // 切断
+                // 切断
+                ollapi.Close();
 
                 return tmp;
             }
@@ -234,6 +254,8 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
+                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = FirstMessage });
+
                 var tmp = await BaseChat(FirstMessage);
 
                 if (tmp.Message != null)
@@ -257,7 +279,9 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
+                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
                 this.UserMessage = message;
+
                 var tmp = await BaseChat(message);
 
                 if (tmp.Message != null)
@@ -266,11 +290,30 @@ namespace Zenzai.Models.Zenzai
                     this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
                 }
 
-                PromptChat();
+                // 画像生成の実行
+                CreateImage();
+
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        private async void CreateImage()
+        {
+            // プロンプト生成用チャットの実行
+            var ret = await PromptChat();
+
+            if (ret)
+            {
+                // 画像生成の実行
+                await ExecutePrompt(this.ImagePrompt, "EasyNegative");
             }
         }
         #endregion
@@ -279,7 +322,7 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// プロンプト生成用チャット
         /// </summary>
-        public async void PromptChat()
+        public async Task<bool> PromptChat()
         {
             try
             {
@@ -288,22 +331,15 @@ namespace Zenzai.Models.Zenzai
                 if (tmp.Message != null)
                 {
                     this.ImagePrompt = tmp.Message.Content;   // 画像生成用のプロンプトを取得
+                    return true;
                 }
+                return false;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
-        }
-        #endregion
-
-        #region プロンプトの作成処理
-        /// <summary>
-        /// プロンプトの作成処理
-        /// </summary>
-        public async void ExecutePrompt()
-        {
-            var ret = await ExecutePromptSub();
         }
         #endregion
 
@@ -321,12 +357,15 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// Promptの実行処理
         /// </summary>
-        private async Task<bool> ExecutePromptSub()
+        private async Task<bool> ExecutePrompt(string prompt, string negativePrompt)
         {
             try
             {
                 string url = this.WebuiUri;
-                string outdir = this.WebuiUri;
+                string outdir = this.WebuiOutputDirectory;
+                this.WebUI.Request.PromptItem.Prompt = prompt;
+                this.WebUI.Request.PromptItem.NegativePrompt = negativePrompt;
+
                 List<string> path_list = new List<string>();
                 bool ret = false;
 

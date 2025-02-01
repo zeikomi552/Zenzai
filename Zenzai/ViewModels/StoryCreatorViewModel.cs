@@ -49,6 +49,10 @@ namespace Zenzai.ViewModels
         public DelegateCommand ShowDialogCommand => _showDialogCommand ?? (_showDialogCommand = new DelegateCommand(ShowDialog));
         private DelegateCommand? _ChatCommand;
         public DelegateCommand ChatCommand => _ChatCommand ?? (_ChatCommand = new DelegateCommand(Chat));
+
+        private DelegateCommand? _CloseCommand;
+        public DelegateCommand CloseCommand => _CloseCommand ?? (_CloseCommand = new DelegateCommand(CloseZenzai));
+
         #endregion
 
         private IDialogService _dialogService;
@@ -144,6 +148,23 @@ namespace Zenzai.ViewModels
                 //else
                 //    Title = "I Don't know what you did!?";
             });
+        }
+        #endregion
+
+        #region WebUIの終了処理
+        /// <summary>
+        /// WebUIの終了処理
+        /// </summary>
+        private void CloseZenzai()
+        {
+            try
+            {
+                this.ZenzaiManager.CloseWebUI();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
     }
