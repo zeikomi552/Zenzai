@@ -21,11 +21,11 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// Ollamaコントロール用オブジェクト
         /// </summary>
-        OllamaControllerModel _OllamaCtrl = new OllamaControllerModel();
+        IOllamaControllerModel _OllamaCtrl = new OllamaControllerModel();
         /// <summary>
         /// Ollamaコントロール用オブジェクト
         /// </summary>
-        public OllamaControllerModel OllamaCtrl
+        public IOllamaControllerModel OllamaCtrl
         {
             get
             {
@@ -46,11 +46,11 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// WebUI用コントローラー
         /// </summary>
-        WebUIControllerModel _WebUICtrl = new WebUIControllerModel();
+        IWebUIControllerModel _WebUICtrl = new WebUIControllerModel();
         /// <summary>
         /// WebUI用コントローラー
         /// </summary>
-        public WebUIControllerModel WebUICtrl
+        public IWebUIControllerModel WebUICtrl
         {
             get
             {
@@ -121,24 +121,13 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ZenzaiManagerModel()
+        public ZenzaiManagerModel(IOllamaControllerModel ollamaCtrl, IWebUIControllerModel webUi)
         {
-
+            this.OllamaCtrl = ollamaCtrl;
+            this.WebUICtrl = webUi;
         }
         #endregion
 
-        #region コンストラクタ
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        /// <param name="ollama">Ollama用コントローラー</param>
-        /// <param name="webuiCtrl">WebUI用コントローラー</param>
-        public ZenzaiManagerModel(OllamaControllerModel ollama, WebUIControllerModel webuiCtrl)
-        {
-            this.OllamaCtrl = ollama;
-            this.WebUICtrl = webuiCtrl;
-        }
-        #endregion
 
         #region 最初のメッセージ
         /// <summary>

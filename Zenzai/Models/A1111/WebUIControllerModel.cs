@@ -9,7 +9,7 @@ using Zenzai.Models.Zenzai;
 
 namespace Zenzai.Models.A1111
 {
-    public class WebUIControllerModel : BindableBase
+    public class WebUIControllerModel : BindableBase, IWebUIControllerModel
     {
         #region WebUIA1111用オブジェクト
         /// <summary>

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Zenzai.Models;
+using Zenzai.Models.A1111;
+using Zenzai.Models.Ollama;
 using Zenzai.ViewModels;
 using Zenzai.Views;
 
@@ -22,7 +24,8 @@ namespace Zenzai
             // シングルトンクラスとして登録したい時
             containerRegistry.RegisterDialog<SettingDialog, SettingDialogViewModel>();
 
-            //containerRegistry.RegisterSingleton<IWPParameterM?, WPParameterM>();
+            containerRegistry.RegisterSingleton<IOllamaControllerModel?, OllamaControllerModel>();
+            containerRegistry.RegisterSingleton<IWebUIControllerModel?, WebUIControllerModel>();
 
         }
 

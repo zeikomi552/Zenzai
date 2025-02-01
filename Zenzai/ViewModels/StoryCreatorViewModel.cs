@@ -23,7 +23,7 @@ namespace Zenzai.ViewModels
         /// <summary>
         /// 本アプリ操作用モデル
         /// </summary>
-        ZenzaiManagerModel _ZenzaiManager = new ZenzaiManagerModel();
+        ZenzaiManagerModel _ZenzaiManager;
         /// <summary>
         /// 本アプリ操作用モデル
         /// </summary>
@@ -62,9 +62,10 @@ namespace Zenzai.ViewModels
         /// コンストラクタ
         /// </summary>
         /// <param name="dialogService"></param>
-        public StoryCreatorViewModel(IDialogService dialogService)
+        public StoryCreatorViewModel(IDialogService dialogService, IOllamaControllerModel ollama, IWebUIControllerModel webUi)
         {
             _dialogService = dialogService;
+            _ZenzaiManager = new ZenzaiManagerModel(ollama, webUi);
         }
         #endregion
 

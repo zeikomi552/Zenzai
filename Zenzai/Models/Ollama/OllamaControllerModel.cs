@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Zenzai.Models.Ollama
 {
-    public class OllamaControllerModel : BindableBase
+    public class OllamaControllerModel : BindableBase, IOllamaControllerModel
     {
         #region ゲームの候補を列挙する最初のメッセージ
         /// <summary>
@@ -125,7 +125,7 @@ namespace Zenzai.Models.Ollama
             {
                 return _Port;
             }
-            set
+            private set
             {
                 if (!_Port.Equals(value))
                 {
