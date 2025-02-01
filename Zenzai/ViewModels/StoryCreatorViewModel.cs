@@ -159,7 +159,7 @@ namespace Zenzai.ViewModels
         {
             try
             {
-                this.ZenzaiManager.CloseWebUI();
+                this.ZenzaiManager.WebUICtrl.CloseWebUI();
             }
             catch (Exception e)
             {

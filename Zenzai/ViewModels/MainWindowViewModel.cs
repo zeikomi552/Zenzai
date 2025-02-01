@@ -8,7 +8,10 @@ namespace Zenzai.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-       
+        public void Closing()
+        {
+
+        }
     }
 
 }

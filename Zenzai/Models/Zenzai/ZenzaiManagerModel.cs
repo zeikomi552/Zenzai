@@ -17,27 +17,55 @@ namespace Zenzai.Models.Zenzai
 {
     public class ZenzaiManagerModel : BindableBase
     {
-        public string FirstMessage { get; private set; }
-            = "あなたとできるチャットゲームのおススメを教えてください。\r\nTRPGのようなものを想定しています。\r\n以降、全て日本語でお願いします。\r\n適切な位置で改行をお願いします。";
-        public string PromptMessage { get; private set; }
-            = "雰囲気を感じさせる画像をStable diffusionで出したいと思います。\r\nStable Diffusion用のプロンプトを英語で教えてください。";
-
-        public string Role { get; private set; } = "user";
-
+        #region Ollamaコントロール用オブジェクト
         /// <summary>
-        /// Ollapi用ホスト
+        /// Ollamaコントロール用オブジェクト
         /// </summary>
-        public string OllapiHost { get; private set; } = "localhost";
+        OllamaControllerModel _OllamaCtrl = new OllamaControllerModel();
+        /// <summary>
+        /// Ollamaコントロール用オブジェクト
+        /// </summary>
+        public OllamaControllerModel OllamaCtrl
+        {
+            get
+            {
+                return _OllamaCtrl;
+            }
+            set
+            {
+                if (_OllamaCtrl == null || !_OllamaCtrl.Equals(value))
+                {
+                    _OllamaCtrl = value;
+                    RaisePropertyChanged("OllamaCtrl");
+                }
+            }
+        }
+        #endregion
 
-        public int OllapiPort { get; private set; } = 11434;
-
-        public string OllapiModel { get; private set; } = "example";
-
-        public string WebuiUri { get; private set; } = "http://127.0.0.1:7861";
-
-        public string WebuiOutputDirectory { get; private set; } = @"C:\output";
-
-        public string WebuiCurrentDirectory { get; private set; } = @"C:\Work\stable-diffusion-webui";
+        #region WebUI用コントローラー
+        /// <summary>
+        /// WebUI用コントローラー
+        /// </summary>
+        WebUIControllerModel _WebUICtrl = new WebUIControllerModel();
+        /// <summary>
+        /// WebUI用コントローラー
+        /// </summary>
+        public WebUIControllerModel WebUICtrl
+        {
+            get
+            {
+                return _WebUICtrl;
+            }
+            set
+            {
+                if (_WebUICtrl == null || !_WebUICtrl.Equals(value))
+                {
+                    _WebUICtrl = value;
+                    RaisePropertyChanged("WebUICtrl");
+                }
+            }
+        }
+        #endregion
 
         #region 画像生成用プロンプト
         /// <summary>
@@ -89,31 +117,6 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
-        #region WebUIA1111用オブジェクト
-        /// <summary>
-        /// WebUIA1111用オブジェクト
-        /// </summary>
-        WebUIBaseModel _WebUI = new WebUIBaseModel();
-        /// <summary>
-        /// WebUIA1111用オブジェクト
-        /// </summary>
-        public WebUIBaseModel WebUI
-        {
-            get
-            {
-                return _WebUI;
-            }
-            set
-            {
-                if (_WebUI == null || !_WebUI.Equals(value))
-                {
-                    _WebUI = value;
-                    RaisePropertyChanged("WebUI");
-                }
-            }
-        }
-        #endregion
-
         #region コンストラクタ
         /// <summary>
         /// コンストラクタ
@@ -128,20 +131,12 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="firstMsg">最初のメッセージ設定</param>
-        /// <param name="promptMsg">プロンプト生成用メッセージ設定</param>
-        /// <param name="ollapiHost">Ollama用ホスト設定</param>
-        /// <param name="ollapiPort">Ollama用ポート</param>
-        /// <param name="ollapiModel">Ollama用モデル</param>
-        /// <param name="webuiUri">WebUI用URI</param>
-        public ZenzaiManagerModel(string firstMsg, string promptMsg, string ollapiHost, int ollapiPort, string ollapiModel, string webuiUri)
+        /// <param name="ollama">Ollama用コントローラー</param>
+        /// <param name="webuiCtrl">WebUI用コントローラー</param>
+        public ZenzaiManagerModel(OllamaControllerModel ollama, WebUIControllerModel webuiCtrl)
         {
-            this.FirstMessage = firstMsg;
-            this.PromptMessage = promptMsg;
-            this.OllapiHost = ollapiHost;
-            this.OllapiPort = ollapiPort;
-            this.OllapiModel = ollapiModel;
-            this.WebuiUri = webuiUri;
+            this.OllamaCtrl = ollama;
+            this.WebUICtrl = webuiCtrl;
         }
         #endregion
 
@@ -166,28 +161,7 @@ namespace Zenzai.Models.Zenzai
                     });
                 }
 
-                list.Add(new OllapiMessage()
-                {
-                    Role = this.Role,
-                    Content = message,
-                });
-
-                // Ollapiの起動
-                OllapiChatRequest ollapi = new OllapiChatRequest(this.OllapiHost, this.OllapiPort, this.OllapiModel);
-
-                // 接続
-                ollapi.Open();
-
-                // リクエストの実行
-                var ret = await ollapi.Request(list);
-
-                // メッセージの展開
-                var tmp = JSONUtil.DeserializeFromText<OllapiChatResponse>(ret);
-
-                // 切断
-                ollapi.Close();
-
-                return tmp;
+                return await OllamaCtrl.BaseChat(list, message);
             }
             catch
             {
@@ -254,9 +228,9 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = FirstMessage });
+                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = this.OllamaCtrl.FirstMessage });
 
-                var tmp = await BaseChat(FirstMessage);
+                var tmp = await BaseChat(this.OllamaCtrl.FirstMessage);
 
                 if (tmp.Message != null)
                 {
@@ -313,7 +287,7 @@ namespace Zenzai.Models.Zenzai
             if (ret)
             {
                 // 画像生成の実行
-                await ExecutePrompt(this.ImagePrompt, "EasyNegative");
+                await this.WebUICtrl.ExecutePrompt(this.ImagePrompt);
             }
         }
         #endregion
@@ -326,7 +300,7 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                var tmp = await BaseChat(PromptMessage);
+                var tmp = await BaseChat(this.OllamaCtrl.PromptMessage);
 
                 if (tmp.Message != null)
                 {
@@ -343,66 +317,6 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
-        #region WebUIの終了処理
-        /// <summary>
-        /// WebUIの終了処理
-        /// </summary>
-        public void CloseWebUI()
-        {
-            this.WebUI.WebUIProcessEnd();
-        }
-        #endregion
-
-        #region Promptの実行処理
-        /// <summary>
-        /// Promptの実行処理
-        /// </summary>
-        private async Task<bool> ExecutePrompt(string prompt, string negativePrompt)
-        {
-            try
-            {
-                string url = this.WebuiUri;
-                string outdir = this.WebuiOutputDirectory;
-                this.WebUI.Request.PromptItem.Prompt = prompt;
-                this.WebUI.Request.PromptItem.NegativePrompt = negativePrompt;
-
-                List<string> path_list = new List<string>();
-                bool ret = false;
-
-                (ret, path_list) = await this.WebUI.Request.PostRequest(url, outdir, this.WebUI.Request.PromptItem);
-
-                if (path_list.Count > 0 && this.ChatHistory.SelectedItem != null)
-                {
-                    ((OllapiMessageEx)this.ChatHistory.SelectedItem).FilePath = path_list.ElementAt(0);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ShowMessage.ShowErrorOK(ex.Message, "Error");
-                return false;
-            }
-        }
-        #endregion
-
-        #region WebUIの初期化処理
-        /// <summary>
-        /// WebUIの初期化処理
-        /// </summary>
-        private void InitWebUI()
-        {
-            try
-            {
-                this.WebUI.ExecuteWebUI(this.WebuiCurrentDirectory);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        #endregion
-
         #region 初期化処理
         /// <summary>
         /// 初期化処理
@@ -413,7 +327,7 @@ namespace Zenzai.Models.Zenzai
             {
                 FirstChat();
 
-                InitWebUI();
+                this.WebUICtrl.InitWebUI();
             }
             catch (Exception e)
             {
