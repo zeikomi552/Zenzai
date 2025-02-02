@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <Authors>Zeikomi</Authors>
+    <Company>Zeikomi</Company>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

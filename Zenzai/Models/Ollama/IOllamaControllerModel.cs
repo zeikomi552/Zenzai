@@ -8,20 +8,11 @@ using System.Threading.Tasks;
 
 namespace Zenzai.Models.Ollama
 {
-    public interface IOllamaControllerModel
+    public interface IOllamaControllerModel : IOllamaConfig
     {
-        public string FirstMessage { get; }
-
-        public string PromptMessage {  get; }
-
-        public string Role { get; }
-
-        public string Host { get; }
-
-        public int Port { get; }
-
-        public string Model { get; }
-
         public Task<OllapiChatResponse> BaseChat(List<IOllapiMessage> sourceList, string message);
+
+        public void SetConfig(OllamaConfig config);
+
     }
 }
