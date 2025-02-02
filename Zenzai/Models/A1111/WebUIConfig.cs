@@ -108,5 +108,20 @@ namespace Zenzai.Models.A1111
             }
         }
         #endregion
+
+        #region パラメーターのセット処理
+        /// <summary>
+        /// パラメーターのセット処理
+        /// </summary>
+        /// <param name="ctrl">コントローラー</param>
+        public void SetParameters(IWebUIControllerModel ctrl)
+        {
+            this.WebuiUri = ctrl.WebuiUri;
+            this.WebuiOutputDirectory = ctrl.WebuiOutputDirectory;
+            this.WebuiCurrentDirectory = ctrl.WebuiCurrentDirectory;
+            this.NegativePrompt = ctrl.NegativePrompt;
+        }
+        #endregion
+
     }
 }

@@ -12,5 +12,7 @@ namespace Zenzai.Models.A1111
         public string WebuiOutputDirectory { get; }
         public string WebuiCurrentDirectory { get; }
         public string NegativePrompt { get; }
+
+        public void SetParameters(IWebUIControllerModel ctrl);
     }
 }

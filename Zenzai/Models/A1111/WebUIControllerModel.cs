@@ -120,12 +120,18 @@ namespace Zenzai.Models.A1111
         }
         #endregion
 
-        public void SetConfig(WebUIConfig config)
+        #region コンフィグファイルのデータセット処理
+        /// <summary>
+        /// コンフィグファイルのデータセット処理
+        /// </summary>
+        /// <param name="config">コンフィグ</param>
+        public void SetConfig(IWebUIConfig config)
         {
             this.WebuiUri = config.WebuiUri;
             this.WebuiOutputDirectory = config.WebuiOutputDirectory;
             this.WebuiCurrentDirectory = config.WebuiCurrentDirectory;
             this.NegativePrompt = config.NegativePrompt;
         }
+        #endregion
     }
 }

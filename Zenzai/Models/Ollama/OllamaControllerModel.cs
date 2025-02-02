@@ -55,7 +55,7 @@ namespace Zenzai.Models.Ollama
         /// Configのセット処理
         /// </summary>
         /// <param name="config">Config</param>
-        public void SetConfig(OllamaConfig config)
+        public void SetConfig(IOllamaConfig config)
         {
             this.FirstMessage = config.FirstMessage;
             this.PromptMessage = config.PromptMessage;

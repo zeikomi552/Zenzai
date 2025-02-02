@@ -24,12 +24,20 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Image Margin="5" Source="{Binding ZenzaiManager.ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}" Grid.RowSpan="2"/>
+            <Menu>
+                <MenuItem Header="設定">
+                    <MenuItem Header="設定画面" Command="{Binding ShowDialogCommand}"/>
+                </MenuItem>
+            </Menu>
 
-            <Grid Margin="5" Grid.Row="1">
+            <Image Grid.Row="1" Margin="5" 
+                   Source="{Binding ZenzaiManager.ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}" Grid.RowSpan="2"/>
+
+            <Grid Margin="5" Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>

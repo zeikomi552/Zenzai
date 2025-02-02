@@ -157,5 +157,21 @@ namespace Zenzai.Models.Ollama
             }
         }
         #endregion
+
+        #region パラメーターのセット処理
+        /// <summary>
+        /// パラメーターのセット処理
+        /// </summary>
+        /// <param name="ctrl">コントローラー</param>
+        public void SetParameters(IOllamaControllerModel ctrl)
+        {
+            this.FirstMessage = ctrl.FirstMessage;
+            this.PromptMessage = ctrl.PromptMessage;
+            this.Role = ctrl.Role;
+            this.Host = ctrl.Host;
+            this.Port = ctrl.Port;
+            this.Model = ctrl.Model;
+        }
+        #endregion
     }
 }

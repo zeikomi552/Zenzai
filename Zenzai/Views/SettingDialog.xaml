@@ -1,19 +1,80 @@
 ﻿<UserControl x:Class="Zenzai.Views.SettingDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Zenzai.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Zenzai.Views"
              xmlns:prism="http://prismlibrary.com/" 
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type vm:SettingDialogViewModel}}">
     <Grid x:Name="LayoutRoot" Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding Message}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" TextWrapping="Wrap" />
+        <TabControl>
+            <TabItem Header="Ollama">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Host"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox AcceptsReturn="True" Margin="5" Width="130" VerticalAlignment="Center" Text="{Binding OllamaConfig.Host}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Port"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.Port}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Role"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.Role}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Model"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.Model}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="FirstMessage"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.FirstMessage}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="PromptMessage"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox AcceptsReturn="True" Margin="5" Width="500" Height="70" VerticalAlignment="Center" Text="{Binding OllamaConfig.PromptMessage}"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="WebUI">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="WebuiUri"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding WebUIConfig.WebuiUri}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="NegativePrompt"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox AcceptsReturn="True" Margin="5" Height="70" Width="500" VerticalAlignment="Center" Text="{Binding WebUIConfig.NegativePrompt}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="WebuiCurrentDirectory"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding WebUIConfig.WebuiCurrentDirectory}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="WebuiOutputDirectory"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding WebUIConfig.WebuiOutputDirectory}"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" >
             <Button Command="{Binding CloseDialogCommand}" CommandParameter="true" Content="OK" Width="75" Height="25" IsDefault="True" />
             <Button Command="{Binding CloseDialogCommand}" CommandParameter="false" Content="Cancel" Width="75" Height="25" Margin="10,0,0,0" IsCancel="True" />

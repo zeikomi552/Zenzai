@@ -13,6 +13,6 @@ namespace Zenzai.Models.A1111
         public void CloseWebUI();
         public Task<string> ExecutePrompt(string prompt);
 
-        public void SetConfig(WebUIConfig config);
+        public void SetConfig(IWebUIConfig config);
     }
 }

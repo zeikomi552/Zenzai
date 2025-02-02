@@ -19,5 +19,7 @@ namespace Zenzai.Models.Ollama
         public int Port { get; }
 
         public string Model { get; }
+
+        public void SetParameters(IOllamaControllerModel ctrl);
     }
 }
