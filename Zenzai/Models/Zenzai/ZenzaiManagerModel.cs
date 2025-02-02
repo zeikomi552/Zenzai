@@ -1,4 +1,5 @@
-﻿using Ollapi.api;
+﻿using Microsoft.Win32;
+using Ollapi.api;
 using Ollapi.Common;
 using Ollapi.Interface;
 using System;
@@ -127,7 +128,6 @@ namespace Zenzai.Models.Zenzai
             this.WebUICtrl = webUi;
         }
         #endregion
-
 
         #region 最初のメッセージ
         /// <summary>
@@ -318,6 +318,70 @@ namespace Zenzai.Models.Zenzai
                 FirstChat();
 
                 this.WebUICtrl.InitWebUI();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+
+        #region ゲームファイルの保存処理
+        /// <summary>
+        /// ゲームファイルの保存処理
+        /// </summary>
+        public void Save()
+        {
+            try
+            {
+                // ダイアログのインスタンスを生成
+                var dialog = new SaveFileDialog();
+
+                // ファイルの種類を設定
+                dialog.Filter = "ゲームセーブファイル (*.znzi)|*.znzi";
+
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+
+                    XMLUtil.Seialize(dialog.FileName, this.ChatHistory);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region ファイルのロード処理
+        /// <summary>
+        /// ファイルのロード処理
+        /// </summary>
+        public void Load()
+        {
+            try
+            {
+                // ダイアログのインスタンスを生成
+                var dialog = new OpenFileDialog();
+
+                // ファイルの種類を設定
+                dialog.Filter = "テキストファイル (*.znzi)|*.znzi";
+
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+                    this.ChatHistory = XMLUtil.Deserialize<ChatManagerModel>(dialog.FileName);
+                    this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
+
+                    if (this.ChatHistory.Items.Count > 1)
+                    {
+                        this.UserMessage = this.ChatHistory.Items.ElementAt(this.ChatHistory.Items.Count - 2).Content;
+                        this.SystemMessage = this.ChatHistory.Items.ElementAt(this.ChatHistory.Items.Count - 1).Content;
+                    }
+
+                }
             }
             catch (Exception e)
             {

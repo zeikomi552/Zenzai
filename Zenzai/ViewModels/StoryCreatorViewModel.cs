@@ -1,5 +1,7 @@
 ﻿using DryIoc.ImTools;
 using MahApps.Metro.Converters;
+using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using Ollapi.api;
 using Ollapi.Common;
 using System;
@@ -50,8 +52,11 @@ namespace Zenzai.ViewModels
         private DelegateCommand? _ChatCommand;
         public DelegateCommand ChatCommand => _ChatCommand ?? (_ChatCommand = new DelegateCommand(Chat));
 
-        private DelegateCommand? _CloseCommand;
-        public DelegateCommand CloseCommand => _CloseCommand ?? (_CloseCommand = new DelegateCommand(CloseZenzai));
+        private DelegateCommand? _SaveCommand;
+        public DelegateCommand SaveCommand => _SaveCommand ?? (_SaveCommand = new DelegateCommand(Save));
+
+        private DelegateCommand? _LoadCommand;
+        public DelegateCommand LoadCommand => _LoadCommand ?? (_LoadCommand = new DelegateCommand(Load));
 
         #endregion
 
@@ -152,15 +157,32 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
-        #region WebUIの終了処理
+        #region ゲームファイルの保存処理
         /// <summary>
-        /// WebUIの終了処理
+        /// ゲームファイルの保存処理
         /// </summary>
-        private void CloseZenzai()
+        private void Save()
         {
             try
             {
-                this.ZenzaiManager.WebUICtrl.CloseWebUI();
+                this.ZenzaiManager.Save();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region ファイルのロード処理
+        /// <summary>
+        /// ファイルのロード処理
+        /// </summary>
+        private void Load()
+        {
+            try
+            {
+                this.ZenzaiManager.Load();
             }
             catch (Exception e)
             {
