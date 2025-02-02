@@ -251,6 +251,7 @@ namespace Zenzai.Models.Zenzai
                 {
                     this.SystemMessage = tmp.Message.Content;   // 受信メッセージの画面表示
                     this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
+                    this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
                 }
 
                 // 画像生成の実行
@@ -276,7 +277,7 @@ namespace Zenzai.Models.Zenzai
             if (ret)
             {
                 // 画像生成の実行
-                await this.WebUICtrl.ExecutePrompt(this.ImagePrompt);
+                this.ChatHistory.SelectedItem.FilePath = await this.WebUICtrl.ExecutePrompt(this.ImagePrompt);
             }
         }
         #endregion
