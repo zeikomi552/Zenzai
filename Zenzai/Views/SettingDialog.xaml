@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Zenzai.Views"
-             xmlns:prism="http://prismlibrary.com/" 
+             xmlns:prism="http://prismlibrary.com/" Background="{DynamicResource MahApps.Brushes.Control.Background}"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type vm:SettingDialogViewModel}}">
     <Grid x:Name="LayoutRoot" Margin="5">
         <Grid.RowDefinitions>
