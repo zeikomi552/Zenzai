@@ -131,6 +131,7 @@ namespace Zenzai.Models.A1111
             this.WebuiOutputDirectory = config.WebuiOutputDirectory;
             this.WebuiCurrentDirectory = config.WebuiCurrentDirectory;
             this.NegativePrompt = config.NegativePrompt;
+            this.Prompt = config.Prompt;
         }
         #endregion
     }

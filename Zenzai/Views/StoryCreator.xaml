@@ -23,36 +23,48 @@
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Menu>
-                <MenuItem Header="ファイル">
-                    <MenuItem Header="セーブ" Command="{Binding SaveCommand}"/>
-                    <MenuItem Header="ロード" Command="{Binding LoadCommand}"/>
-                </MenuItem>
-                <MenuItem Header="設定">
-                    <MenuItem Header="設定画面" Command="{Binding ShowDialogCommand}"/>
-                </MenuItem>
-            </Menu>
-
-            <Image Grid.Row="1" Margin="5" 
-                   Source="{Binding ZenzaiManager.ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}" Grid.RowSpan="2"/>
-
-            <Grid Margin="5" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Border Width="300" HorizontalAlignment="Left" Margin="5" BorderThickness="1" BorderBrush="AliceBlue">
-                    <TextBlock TextWrapping="Wrap"                           Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
-                </Border>
-                <Border Width="300" HorizontalAlignment="Left" Margin="5" BorderThickness="1" Grid.Row="1" BorderBrush="AliceBlue">
-                    <TextBlock TextWrapping="Wrap"                           Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
-                </Border>
+                <Menu>
+                    <MenuItem Header="ファイル">
+                        <MenuItem Header="セーブ" Command="{Binding SaveCommand}"/>
+                        <MenuItem Header="ロード" Command="{Binding LoadCommand}"/>
+                        <MenuItem Header="Markdown出力" Command="{Binding SaveMarkdownCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="設定">
+                        <MenuItem Header="設定画面" Command="{Binding ShowDialogCommand}"/>
+                    </MenuItem>
+                </Menu>
+
+                <Image Grid.Row="1" Margin="5" 
+                   Source="{Binding ZenzaiManager.ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}" Grid.RowSpan="2"/>
+
+                <Grid Margin="5" Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Border Width="300" HorizontalAlignment="Left" Margin="5" BorderThickness="1" BorderBrush="AliceBlue">
+                        <TextBlock TextWrapping="Wrap"                           Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
+                    </Border>
+                    <Border Width="300" HorizontalAlignment="Left" Margin="5" BorderThickness="1" Grid.Row="1" BorderBrush="AliceBlue">
+                        <TextBlock TextWrapping="Wrap"                           Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
+                    </Border>
+                </Grid>
             </Grid>
+            <Expander Grid.Column="1">
+                <DataGrid ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
+                    
+                </DataGrid>
+            </Expander>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

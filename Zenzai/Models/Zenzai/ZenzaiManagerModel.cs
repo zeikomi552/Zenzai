@@ -276,8 +276,26 @@ namespace Zenzai.Models.Zenzai
 
             if (ret)
             {
+                string prompt = this.ImagePrompt;
+                if (this.ImagePrompt.Contains("\""))
+                {
+                    int bfIdx = this.ImagePrompt.IndexOf("\"");
+                    int index = this.ImagePrompt.IndexOf("\"", bfIdx + 1);
+
+                    if (index > bfIdx + 1)
+                    {
+                        prompt = prompt.Substring(bfIdx + 1, index - bfIdx);
+                    }
+                    else
+                    {
+                        prompt = prompt.Substring(bfIdx + 1);
+                    }
+                }
+
+                prompt = this.WebUICtrl.Prompt + "," + prompt;
+
                 // 画像生成の実行
-                this.ChatHistory.SelectedItem.FilePath = await this.WebUICtrl.ExecutePrompt(this.ImagePrompt);
+                this.ChatHistory.SelectedItem.FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
             }
         }
         #endregion
@@ -315,7 +333,7 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                FirstChat();
+                //FirstChat();
 
                 this.WebUICtrl.InitWebUI();
             }

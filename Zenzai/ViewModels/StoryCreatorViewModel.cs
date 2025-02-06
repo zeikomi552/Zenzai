@@ -7,6 +7,7 @@ using Ollapi.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,12 @@ namespace Zenzai.ViewModels
 
         private DelegateCommand? _LoadCommand;
         public DelegateCommand LoadCommand => _LoadCommand ?? (_LoadCommand = new DelegateCommand(Load));
+
+
+        private DelegateCommand? _SaveMarkdownCommand;
+        public DelegateCommand SaveMarkdownCommand => _SaveMarkdownCommand ?? (_SaveMarkdownCommand = new DelegateCommand(SaveMarkdown));
+
+
 
         #endregion
 
@@ -183,6 +190,57 @@ namespace Zenzai.ViewModels
             try
             {
                 this.ZenzaiManager.Load();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region マークダウンの保存処理
+        /// <summary>
+        /// マークダウンの保存処理
+        /// </summary>
+        private void SaveMarkdown()
+        {
+            try
+            {
+                // ダイアログのインスタンスを生成
+                var dialog = new SaveFileDialog();
+
+                // ファイルの種類を設定
+                dialog.Filter = "ストーリー (*.md)|*.md";
+
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+                    StringBuilder text = new StringBuilder();
+
+                    var dir = System.IO.Path.GetDirectoryName(dialog.FileName)!;
+
+                    foreach (var tmp in this.ZenzaiManager.ChatHistory.Items)
+                    {
+                        text.AppendLine(tmp.Role);
+                        text.AppendLine("```");
+                        text.AppendLine(tmp.Content);
+                        text.AppendLine("```");
+                        text.AppendLine();
+
+                        if (!string.IsNullOrEmpty(tmp.FilePath))
+                        {
+                            var filename = System.IO.Path.GetFileName(tmp.FilePath);
+                            var filepath = Path.Combine(dir, filename);
+                            File.Copy(tmp.FilePath, filepath);
+                            text.AppendLine($"![]({filename})");
+                        }
+                        text.AppendLine();
+                    }
+                    using (StreamWriter writer = new StreamWriter(dialog.FileName, false, Encoding.UTF8)) // ファイルへの書き込み
+                    {
+                        writer.WriteLine(text.ToString()); // データを書き込む
+                    }
+                }
             }
             catch (Exception e)
             {

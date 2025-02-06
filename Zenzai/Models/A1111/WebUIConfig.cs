@@ -88,6 +88,30 @@ namespace Zenzai.Models.A1111
         /// <summary>
         /// ネガティブプロンプト
         /// </summary>
+        string _Prompt = "";
+        /// <summary>
+        /// ネガティブプロンプト
+        /// </summary>
+        public string Prompt
+        {
+            get
+            {
+                return _Prompt;
+            }
+            set
+            {
+                if (_Prompt == null || !_Prompt.Equals(value))
+                {
+                    _Prompt = value;
+                    RaisePropertyChanged("Prompt");
+                }
+            }
+        }
+        #endregion
+        #region ネガティブプロンプト
+        /// <summary>
+        /// ネガティブプロンプト
+        /// </summary>
         string _NegativePrompt = "EasyNegative";
         /// <summary>
         /// ネガティブプロンプト
@@ -120,6 +144,7 @@ namespace Zenzai.Models.A1111
             this.WebuiOutputDirectory = ctrl.WebuiOutputDirectory;
             this.WebuiCurrentDirectory = ctrl.WebuiCurrentDirectory;
             this.NegativePrompt = ctrl.NegativePrompt;
+            this.Prompt = ctrl.Prompt;
         }
         #endregion
 

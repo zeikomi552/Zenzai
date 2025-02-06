@@ -39,7 +39,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="FirstMessage"/>
                         <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.FirstMessage}"/>
+                        <TextBox AcceptsReturn="True" Margin="5" Height="70" Width="500" VerticalAlignment="Center" Text="{Binding OllamaConfig.FirstMessage}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="PromptMessage"/>
@@ -55,6 +55,11 @@
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="WebuiUri"/>
                         <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
                         <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding WebUIConfig.WebuiUri}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Prompt"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <TextBox AcceptsReturn="True" Margin="5" Height="70" Width="500" VerticalAlignment="Center" Text="{Binding WebUIConfig.Prompt}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="NegativePrompt"/>
