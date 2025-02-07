@@ -61,7 +61,7 @@
                 </Grid>
             </Grid>
             <Expander Grid.Column="1">
-                <DataGrid IsReadOnly="True" ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}"/>
+                <DataGrid MaxWidth="500" IsReadOnly="True" ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}"/>
             </Expander>
         </Grid>
         <Grid Grid.Row="1">
