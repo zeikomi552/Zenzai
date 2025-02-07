@@ -61,7 +61,15 @@
                 </Grid>
             </Grid>
             <Expander Grid.Column="1">
-                <DataGrid MaxWidth="500" IsReadOnly="True" ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}"/>
+                <DataGrid AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
+                          ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Expander>
         </Grid>
         <Grid  Grid.Row="1" Background="{DynamicResource MahApps.Brushes.MenuItem.SelectionFill}">
