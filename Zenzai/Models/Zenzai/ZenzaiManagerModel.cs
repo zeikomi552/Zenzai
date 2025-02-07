@@ -260,7 +260,7 @@ namespace Zenzai.Models.Zenzai
 
                     if (index > bfIdx + 1)
                     {
-                        prompt = prompt.Substring(bfIdx + 1, index - bfIdx);
+                        prompt = prompt.Substring(bfIdx + 1, index - bfIdx - 1);
                     }
                     else
                     {
