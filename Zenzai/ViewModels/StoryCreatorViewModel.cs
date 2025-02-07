@@ -134,6 +134,8 @@ namespace Zenzai.ViewModels
             {
                 // 最初のチャット
                 this.ZenzaiManager.Chat(this.SendMessage);
+
+                this.SendMessage = string.Empty;
             }
             catch (Exception e)
             {
