@@ -233,6 +233,18 @@ namespace Zenzai.ViewModels
                             var filepath = Path.Combine(dir, filename);
                             File.Copy(tmp.FilePath, filepath);
                             text.AppendLine($"![]({filename})");
+                            text.AppendLine();
+                            text.AppendLine($"Prompt");
+                            text.AppendLine($"");
+                            text.AppendLine($"```");
+                            text.AppendLine($"{tmp.Prompt}");
+                            text.AppendLine($"```");
+                            text.AppendLine($"Negative Prompt");
+                            text.AppendLine($"");
+                            text.AppendLine($"");
+                            text.AppendLine($"```");
+                            text.AppendLine($"{tmp.NegativePrompt}");
+                            text.AppendLine($"```");
                         }
                         text.AppendLine();
                     }

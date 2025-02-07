@@ -209,31 +209,6 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
-        #region 最初のチャット
-        /// <summary>
-        /// 最初のチャット
-        /// </summary>
-        private async void FirstChat()
-        {
-            try
-            {
-                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = this.OllamaCtrl.FirstMessage });
-
-                var tmp = await BaseChat(this.OllamaCtrl.FirstMessage);
-
-                if (tmp.Message != null)
-                {
-                    this.SystemMessage = tmp.Message.Content;   // 受信メッセージの画面表示
-                    this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        #endregion
-
         #region チャット
         /// <summary>
         /// チャット
@@ -296,6 +271,8 @@ namespace Zenzai.Models.Zenzai
 
                 // 画像生成の実行
                 this.ChatHistory.SelectedItem.FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
+                this.ChatHistory.SelectedItem.Prompt = prompt;
+                this.ChatHistory.SelectedItem.NegativePrompt = this.WebUICtrl.NegativePrompt;
             }
         }
         #endregion

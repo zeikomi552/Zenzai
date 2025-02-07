@@ -57,6 +57,56 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
+        #region プロンプト
+        /// <summary>
+        /// プロンプト
+        /// </summary>
+        string _Prompt = string.Empty;
+        /// <summary>
+        /// プロンプト
+        /// </summary>
+        public string Prompt
+        {
+            get
+            {
+                return _Prompt;
+            }
+            set
+            {
+                if (_Prompt == null || !_Prompt.Equals(value))
+                {
+                    _Prompt = value;
+                    RaisePropertyChanged("Prompt");
+                }
+            }
+        }
+        #endregion
+
+        #region ネガティブプロンプト
+        /// <summary>
+        /// ネガティブプロンプト
+        /// </summary>
+        string _NegativePrompt = string.Empty;
+        /// <summary>
+        /// ネガティブプロンプト
+        /// </summary>
+        public string NegativePrompt
+        {
+            get
+            {
+                return _NegativePrompt;
+            }
+            set
+            {
+                if (_NegativePrompt == null || !_NegativePrompt.Equals(value))
+                {
+                    _NegativePrompt = value;
+                    RaisePropertyChanged("NegativePrompt");
+                }
+            }
+        }
+        #endregion
+
 
     }
 }
