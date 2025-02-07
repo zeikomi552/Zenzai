@@ -24,8 +24,8 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Grid>
                 <Grid.RowDefinitions>
@@ -61,9 +61,7 @@
                 </Grid>
             </Grid>
             <Expander Grid.Column="1">
-                <DataGrid ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
-                    
-                </DataGrid>
+                <DataGrid ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}"/>
             </Expander>
         </Grid>
         <Grid Grid.Row="1">
