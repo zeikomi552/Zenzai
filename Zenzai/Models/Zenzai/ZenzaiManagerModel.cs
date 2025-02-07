@@ -4,6 +4,7 @@ using Ollapi.Common;
 using Ollapi.Interface;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -334,13 +335,60 @@ namespace Zenzai.Models.Zenzai
                 var dialog = new SaveFileDialog();
 
                 // ファイルの種類を設定
-                dialog.Filter = "ゲームセーブファイル (*.znzi)|*.znzi";
+                dialog.Filter = "セーブファイル (*.znzi)|*.znzi";
 
                 // ダイアログを表示する
                 if (dialog.ShowDialog() == true)
                 {
+                    string tmpdir = Path.GetTempPath();
 
-                    XMLUtil.Seialize(dialog.FileName, this.ChatHistory);
+
+                    string path = PathManager.GetApplicationFolder();
+                    string zipbaseDir = Path.Combine(tmpdir, "ZenzaiTemporary", "SaveTemporary");
+                    string imageDir = Path.Combine(zipbaseDir, "Image");
+
+                    try
+                    {
+                        // ディレクトリが存在する場合
+                        if (Directory.Exists(zipbaseDir))
+                        {
+                            // 一時フォルダを削除
+                            Directory.Delete(zipbaseDir, true);
+                        }
+                    }
+                    catch { }
+
+                    PathManager.CreateDirectory(zipbaseDir);    // 一時フォルダの作成
+                    PathManager.CreateDirectory(imageDir);      // イメージフォルダの作成
+
+                    // Imageファイルのコピー
+                    foreach (var chatitem in this.ChatHistory.Items)
+                    {
+                        // ファイルの存在チェック
+                        if (!string.IsNullOrEmpty(chatitem.FilePath) && File.Exists(chatitem.FilePath))
+                        {
+                            // ファイルのコピー
+                            File.Copy(chatitem.FilePath, Path.Combine(imageDir, System.IO.Path.GetFileName(chatitem.FilePath)));
+                        }
+                    }
+
+                    // ストーリーデータの保存
+                    var filename = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+                    XMLUtil.Seialize(Path.Combine(zipbaseDir, "story") + ".conf", this.ChatHistory);
+
+                    // すでにファイルが存在する場合は削除
+                    if (File.Exists(dialog.FileName))
+                    {
+                        File.Delete(dialog.FileName);
+                    }
+
+                    //ZIP書庫を作成
+                    System.IO.Compression.ZipFile.CreateFromDirectory(
+                       zipbaseDir,
+                        dialog.FileName,
+                        System.IO.Compression.CompressionLevel.Optimal,
+                        false,
+                        System.Text.Encoding.UTF8);
                 }
             }
             catch (Exception e)
@@ -367,14 +415,46 @@ namespace Zenzai.Models.Zenzai
                 // ダイアログを表示する
                 if (dialog.ShowDialog() == true)
                 {
-                    this.ChatHistory = XMLUtil.Deserialize<ChatManagerModel>(dialog.FileName);
-                    this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
+                    string tmpdir = Path.GetTempPath();
+                    string path = PathManager.GetApplicationFolder();
+                    string zipbaseDir = Path.Combine(tmpdir, "ZenzaiTemporary", "LoadTemporary");
+                    string imageDir = Path.Combine(zipbaseDir, "Image");
 
-                    if (this.ChatHistory.Items.Count > 1)
+                    try
                     {
-                        this.UserMessage = this.ChatHistory.Items.ElementAt(this.ChatHistory.Items.Count - 2).Content;
-                        this.SystemMessage = this.ChatHistory.Items.ElementAt(this.ChatHistory.Items.Count - 1).Content;
+                        // ディレクトリが存在する場合
+                        if (Directory.Exists(zipbaseDir))
+                        {
+                            // 一時フォルダを削除
+                            Directory.Delete(zipbaseDir, true);
+                        }
                     }
+                    catch { }
+
+                    //ZIP書庫を展開する
+                    System.IO.Compression.ZipFile.ExtractToDirectory(
+                        dialog.FileName,
+                        zipbaseDir);
+
+                    this.ChatHistory = XMLUtil.Deserialize<ChatManagerModel>(Path.Combine(zipbaseDir, "story.conf"));
+
+                    foreach (var chatitem in this.ChatHistory.Items)
+                    {
+                        // ファイル名がない場合は飛ばす
+                        if (string.IsNullOrEmpty(chatitem.FilePath))
+                        {
+                            continue;
+                        }
+
+                        if (File.Exists(chatitem.FilePath))
+                        {
+                            File.Delete(chatitem.FilePath);
+                        }
+
+                        // ファイルのコピー
+                        File.Copy(Path.Combine(imageDir, System.IO.Path.GetFileName(chatitem.FilePath)), chatitem.FilePath);
+                    }
+                    this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
 
                 }
             }
