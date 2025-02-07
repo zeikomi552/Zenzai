@@ -70,13 +70,13 @@ namespace Zenzai.Models.Ollama
         public List<IOllapiMessage> ToOllapiMessage()
         {
             return (from x in _Items
-                      select new OllapiMessage()
-                      { 
-                          Content = x.Content,
-                          Role = x.Role,
-                          Images = x.Images,
-                      }).ToList<IOllapiMessage>();
-      
+                    select new OllapiMessage()
+                    {
+                        Content = x.Content,
+                        Role = x.Role,
+                        Images = x.Images,
+                    }).ToList<IOllapiMessage>();
+
         }
         #endregion
     }

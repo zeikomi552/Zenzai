@@ -373,8 +373,12 @@ namespace Zenzai.Models.Zenzai
                     }
 
                     // ストーリーデータの保存
+                    ChatManagerModel savedata = new ChatManagerModel()
+                    {
+                        Items = new System.Collections.ObjectModel.ObservableCollection<OllapiMessageEx>(CreateSaveChatHistory())
+                    };
                     var filename = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
-                    XMLUtil.Seialize(Path.Combine(zipbaseDir, "story") + ".conf", this.ChatHistory);
+                    XMLUtil.Seialize(Path.Combine(zipbaseDir, "story.conf"), savedata);
 
                     // すでにファイルが存在する場合は削除
                     if (File.Exists(dialog.FileName))
@@ -446,6 +450,8 @@ namespace Zenzai.Models.Zenzai
                             continue;
                         }
 
+                        chatitem.FilePath = Path.Combine(this.WebUICtrl.WebuiOutputDirectory, chatitem.FilePath);
+
                         if (File.Exists(chatitem.FilePath))
                         {
                             File.Delete(chatitem.FilePath);
@@ -464,5 +470,17 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
+
+        private List<OllapiMessageEx> CreateSaveChatHistory()
+        {
+            List<OllapiMessageEx> list = new List<OllapiMessageEx>();
+            foreach (var item in this.ChatHistory.Items)
+            {
+                var copy = item.Copy();
+                copy.FilePath = copy.FilePath.Replace(this.WebUICtrl.WebuiOutputDirectory + "\\", "");
+                list.Add(copy);
+            }
+            return list;
+        }
     }
 }

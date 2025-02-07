@@ -107,6 +107,23 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
-
+        #region コピー処理
+        /// <summary>
+        /// コピー処理
+        /// </summary>
+        /// <returns>コピーした値</returns>
+        public OllapiMessageEx Copy()
+        {
+            return new OllapiMessageEx()
+            {
+                Content = this.Content,
+                FilePath = this.FilePath,
+                Images = this.Images,
+                NegativePrompt = this.NegativePrompt,
+                Role = this.Role,
+                Prompt = this.Prompt,
+            };
+        }
+        #endregion
     }
 }
