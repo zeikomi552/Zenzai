@@ -52,11 +52,11 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Border Width="300" HorizontalAlignment="Left" Margin="5" BorderThickness="1" BorderBrush="AliceBlue">
-                        <TextBlock TextWrapping="Wrap"                           Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
+                    <Border Margin="5" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="1">
+                        <TextBlock Margin="10" FontSize="20" TextWrapping="Wrap" Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}"/>
                     </Border>
-                    <Border Width="300" HorizontalAlignment="Left" Margin="5" BorderThickness="1" Grid.Row="1" BorderBrush="AliceBlue">
-                        <TextBlock TextWrapping="Wrap"                           Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}" Background="#4CFFFFFF"/>
+                    <Border Grid.Row="1" Margin="5" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="1">
+                        <TextBlock Margin="10" TextWrapping="Wrap"  FontSize="20" Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}"/>
                     </Border>
                 </Grid>
             </Grid>
