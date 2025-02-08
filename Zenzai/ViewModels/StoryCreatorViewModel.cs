@@ -116,6 +116,7 @@ namespace Zenzai.ViewModels
             {
                 // 初期化処理
                 this.ZenzaiManager.Initialize();
+                this.SendMessage = this.ZenzaiManager.OllamaCtrl.FirstMessage;
             }
             catch (Exception e)
             {
