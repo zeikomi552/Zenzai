@@ -322,7 +322,6 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
-
         #region ゲームファイルの保存処理
         /// <summary>
         /// ゲームファイルの保存処理
@@ -481,6 +480,46 @@ namespace Zenzai.Models.Zenzai
                 list.Add(copy);
             }
             return list;
+        }
+
+        /// <summary>
+        /// メッセージのリフレッシュ
+        /// </summary>
+        public void RefreshMessage()
+        {
+            var sel = this.ChatHistory.SelectedItem;
+            if (sel != null)
+            {
+                int index = this.ChatHistory.Items.IndexOf(sel);
+
+                if (sel.Role.Equals("user"))
+                {
+                    this.UserMessage = sel.Content;
+
+                    if (this.ChatHistory.Items.Count() > index + 1)
+                    {
+                        this.SystemMessage = this.ChatHistory.Items.ElementAt(index + 1).Content;
+                    }
+                    else
+                    {
+                        this.SystemMessage = string.Empty;
+                    }
+                }
+                else
+                {
+                    if (index - 1 >= 0)
+                    {
+                        this.UserMessage = this.ChatHistory.Items.ElementAt(index - 1).Content;
+                    }
+                    else
+                    {
+                        this.UserMessage = string.Empty;
+                    }
+
+                    this.SystemMessage = this.ChatHistory.Items.ElementAt(index).Content;
+                }
+            }
+
         }
     }
 }

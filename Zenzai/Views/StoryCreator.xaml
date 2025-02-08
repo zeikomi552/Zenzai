@@ -69,6 +69,11 @@
                         <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
                     </DataGrid.Columns>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="SelectionChanged">
+                            <b:CallMethodAction TargetObject="{Binding}" MethodName="SelectionChanged"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                 </DataGrid>
             </Expander>
         </Grid>
