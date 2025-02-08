@@ -263,5 +263,23 @@ namespace Zenzai.ViewModels
             }
         }
         #endregion
+
+        #region 選択位置が変更になった場合の処理
+        /// <summary>
+        /// 選択位置が変更になった場合の処理
+        /// </summary>
+        public void SelectionChanged()
+        {
+            try
+            {
+                // 画面の更新
+                this.ZenzaiManager.RefreshMessage();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
     }
 }
