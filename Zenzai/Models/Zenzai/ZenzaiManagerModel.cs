@@ -143,12 +143,19 @@ namespace Zenzai.Models.Zenzai
 
                 foreach (var element in this.ChatHistory.Items)
                 {
-                    list.Add(new OllapiMessage()
+                    if (!element.Equals(this.ChatHistory.SelectedItem))
                     {
-                        Content = element.Content,
-                        Role = element.Role,
-                        Images = element.Images,
-                    });
+                        list.Add(new OllapiMessage()
+                        {
+                            Content = element.Content,
+                            Role = element.Role,
+                            Images = element.Images,
+                        });
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
                 return await OllamaCtrl.BaseChat(list, message);
@@ -245,7 +252,7 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// 画像生成の実行処理(WebUIを使用)
         /// </summary>
-        private async void CreateImage()
+        public async void CreateImage()
         {
             // プロンプト生成用チャットの実行
             var ret = await PromptChat();

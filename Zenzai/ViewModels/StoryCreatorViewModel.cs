@@ -281,5 +281,22 @@ namespace Zenzai.ViewModels
             }
         }
         #endregion
+
+        #region 画像の再作成処理
+        /// <summary>
+        /// 画像の再作成処理
+        /// </summary>
+        public void ReCreateImage()
+        {
+            try
+            {
+                this.ZenzaiManager.CreateImage();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
     }
 }
