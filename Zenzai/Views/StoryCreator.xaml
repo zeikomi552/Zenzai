@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Zenzai.Views"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Class="Zenzai.Views.StoryCreator"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Name="userControl" x:Class="Zenzai.Views.StoryCreator"
              mc:Ignorable="d" Background="{DynamicResource MahApps.Brushes.Control.Background}"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type={x:Type vm:StoryCreatorViewModel}}">
     <UserControl.Resources>
@@ -63,6 +63,18 @@
             <Expander Grid.Column="1">
                 <DataGrid AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
                           ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="画像再生成">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="Click">
+                                        <b:CallMethodAction TargetObject="{Binding}" MethodName="ReCreateImage"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
                     <DataGrid.Columns>
                         <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>

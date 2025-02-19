@@ -149,6 +149,10 @@ namespace Zenzai.Models.Zenzai
                         Role = element.Role,
                         Images = element.Images,
                     });
+                    if (element.Equals(this.ChatHistory.SelectedItem))
+                    {
+                        break;
+                    }
                 }
 
                 return await OllamaCtrl.BaseChat(list, message);
@@ -245,8 +249,10 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// 画像生成の実行処理(WebUIを使用)
         /// </summary>
-        private async void CreateImage()
+        public async void CreateImage()
         {
+            var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
+
             // プロンプト生成用チャットの実行
             var ret = await PromptChat();
 
@@ -271,9 +277,9 @@ namespace Zenzai.Models.Zenzai
                 prompt = this.WebUICtrl.Prompt + "," + prompt;
 
                 // 画像生成の実行
-                this.ChatHistory.SelectedItem.FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
-                this.ChatHistory.SelectedItem.Prompt = prompt;
-                this.ChatHistory.SelectedItem.NegativePrompt = this.WebUICtrl.NegativePrompt;
+                this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
+                this.ChatHistory.Items[curIdx].Prompt = prompt;
+                this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
             }
         }
         #endregion
