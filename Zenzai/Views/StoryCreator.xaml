@@ -47,18 +47,20 @@
                 <Image Grid.Row="1" Margin="5" 
                    Source="{Binding ZenzaiManager.ChatHistory.SelectedItem.FilePath, Converter={StaticResource URLStringToImageSourceConverter}}" Grid.RowSpan="2"/>
 
-                <Grid Margin="5" Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Border Margin="5" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="1">
-                        <TextBlock Margin="10" FontSize="20" TextWrapping="Wrap" Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}"/>
-                    </Border>
-                    <Border Grid.Row="1" Margin="5" CornerRadius="20" BorderBrush="{DynamicResource MahApps.Brushes.ValidationSummary4}" BorderThickness="1">
-                        <TextBlock Foreground="{DynamicResource MahApps.Brushes.ValidationSummary4}" Margin="10" TextWrapping="Wrap"  FontSize="20" Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}"/>
-                    </Border>
-                </Grid>
+                <Expander IsExpanded="True" Background="#4C000000" Grid.Row="2">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Margin="5" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="1">
+                            <TextBlock Margin="10" FontSize="20" TextWrapping="Wrap" Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}"/>
+                        </Border>
+                        <Border Grid.Row="1" Margin="5" CornerRadius="20" BorderBrush="{DynamicResource MahApps.Brushes.ValidationSummary4}" BorderThickness="1">
+                            <TextBlock Foreground="{DynamicResource MahApps.Brushes.ValidationSummary4}" Margin="10" TextWrapping="Wrap"  FontSize="20" Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}"/>
+                        </Border>
+                    </Grid>
+                </Expander>
             </Grid>
             <Expander Grid.Column="1">
                 <DataGrid AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
