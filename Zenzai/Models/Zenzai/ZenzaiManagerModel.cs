@@ -274,7 +274,11 @@ namespace Zenzai.Models.Zenzai
                     }
                 }
 
-                prompt = this.WebUICtrl.Prompt + "," + prompt;
+                // ベースのプロンプトが設定されている場合、ベースのプロンプトを付与する
+                if (!string.IsNullOrEmpty(this.WebUICtrl.Prompt))
+                {
+                    prompt = this.WebUICtrl.Prompt + "," + prompt;
+                }
 
                 // 画像生成の実行
                 this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
