@@ -107,6 +107,33 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
+        #region 作成時間
+        /// <summary>
+        /// 作成時間
+        /// </summary>
+        DateTime? _CreatedAt = null;
+        /// <summary>
+        /// 作成時間
+        /// </summary>
+        public DateTime? CreatedAt
+        {
+            get
+            {
+                return _CreatedAt;
+            }
+            set
+            {
+                if (_CreatedAt == null || !_CreatedAt.Equals(value))
+                {
+                    _CreatedAt = value;
+                    RaisePropertyChanged("CreatedAt");
+                }
+            }
+        }
+        #endregion
+
+
+
         #region コピー処理
         /// <summary>
         /// コピー処理
@@ -122,6 +149,7 @@ namespace Zenzai.Models.Zenzai
                 NegativePrompt = this.NegativePrompt,
                 Role = this.Role,
                 Prompt = this.Prompt,
+                CreatedAt = this.CreatedAt,
             };
         }
         #endregion

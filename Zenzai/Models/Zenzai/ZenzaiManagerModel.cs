@@ -258,6 +258,7 @@ namespace Zenzai.Models.Zenzai
 
             if (ret)
             {
+                this.ChatHistory.Items[curIdx].CreatedAt = null;
                 string prompt = this.ImagePrompt;
                 if (this.ImagePrompt.Contains("\""))
                 {
@@ -284,6 +285,7 @@ namespace Zenzai.Models.Zenzai
                 this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
                 this.ChatHistory.Items[curIdx].Prompt = prompt;
                 this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
+                this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
             }
         }
         #endregion

@@ -82,6 +82,7 @@
                         <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="CreatedAt" Binding="{Binding CreatedAt}"/>
                     </DataGrid.Columns>
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
