@@ -80,6 +80,15 @@ namespace Zenzai.Models.A1111
                 string outdir = this.WebuiOutputDirectory;
                 this.WebUI.Request.PromptItem.Prompt = prompt;
                 this.WebUI.Request.PromptItem.NegativePrompt = this.NegativePrompt;
+                this.WebUI.Request.PromptItem.Steps = this.Steps;
+                this.WebUI.Request.PromptItem.Width = this.Width;
+                this.WebUI.Request.PromptItem.Height = this.Height;
+                this.WebUI.Request.PromptItem.CfgScale = this.CfgScale;
+                this.WebUI.Request.PromptItem.SamplerIndex = this.SamplerIndex;
+                this.WebUI.Request.PromptItem.Sampler = this.Sampler;
+                this.WebUI.Request.PromptItem.N_iter = this.N_iter;
+                this.WebUI.Request.PromptItem.BatchSize = this.BatchSize;
+                this.WebUI.Request.PromptItem.Seed = this.Seed;
 
                 List<string> path_list = new List<string>();
                 bool ret = false;
@@ -132,6 +141,16 @@ namespace Zenzai.Models.A1111
             this.WebuiCurrentDirectory = config.WebuiCurrentDirectory;
             this.NegativePrompt = config.NegativePrompt;
             this.Prompt = config.Prompt;
+
+            this.Steps = config.Steps;
+            this.Width = config.Width;
+            this.Height = config.Height;
+            this.CfgScale = config.CfgScale;
+            this.SamplerIndex = config.SamplerIndex;
+            this.Sampler = config.Sampler;
+            this.N_iter = config.N_iter;
+            this.BatchSize = config.BatchSize;
+            this.Seed = config.Seed;
         }
         #endregion
     }
