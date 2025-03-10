@@ -251,41 +251,48 @@ namespace Zenzai.Models.Zenzai
         /// </summary>
         public async void CreateImage()
         {
-            var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
-
-            // プロンプト生成用チャットの実行
-            var ret = await PromptChat();
-
-            if (ret)
+            try
             {
-                this.ChatHistory.Items[curIdx].CreatedAt = null;
-                string prompt = this.ImagePrompt;
-                if (this.ImagePrompt.Contains("\""))
+                var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
+
+                // プロンプト生成用チャットの実行
+                var ret = await PromptChat();
+
+                if (ret)
                 {
-                    int bfIdx = this.ImagePrompt.IndexOf("\"");
-                    int index = this.ImagePrompt.IndexOf("\"", bfIdx + 1);
-
-                    if (index > bfIdx + 1)
+                    this.ChatHistory.Items[curIdx].CreatedAt = null;
+                    string prompt = this.ImagePrompt;
+                    if (this.ImagePrompt.Contains("\""))
                     {
-                        prompt = prompt.Substring(bfIdx + 1, index - bfIdx - 1);
+                        int bfIdx = this.ImagePrompt.IndexOf("\"");
+                        int index = this.ImagePrompt.IndexOf("\"", bfIdx + 1);
+
+                        if (index > bfIdx + 1)
+                        {
+                            prompt = prompt.Substring(bfIdx + 1, index - bfIdx - 1);
+                        }
+                        else
+                        {
+                            prompt = prompt.Substring(bfIdx + 1);
+                        }
                     }
-                    else
+
+                    // ベースのプロンプトが設定されている場合、ベースのプロンプトを付与する
+                    if (!string.IsNullOrEmpty(this.WebUICtrl.Prompt))
                     {
-                        prompt = prompt.Substring(bfIdx + 1);
+                        prompt = this.WebUICtrl.Prompt + "," + prompt;
                     }
-                }
 
-                // ベースのプロンプトが設定されている場合、ベースのプロンプトを付与する
-                if (!string.IsNullOrEmpty(this.WebUICtrl.Prompt))
-                {
-                    prompt = this.WebUICtrl.Prompt + "," + prompt;
+                    // 画像生成の実行
+                    this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
+                    this.ChatHistory.Items[curIdx].Prompt = prompt;
+                    this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
+                    this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
                 }
-
-                // 画像生成の実行
-                this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
-                this.ChatHistory.Items[curIdx].Prompt = prompt;
-                this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
-                this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion
