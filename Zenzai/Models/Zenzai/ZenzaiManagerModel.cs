@@ -251,41 +251,53 @@ namespace Zenzai.Models.Zenzai
         /// </summary>
         public async void CreateImage()
         {
-            var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
-
-            // プロンプト生成用チャットの実行
-            var ret = await PromptChat();
-
-            if (ret)
+            try
             {
-                this.ChatHistory.Items[curIdx].CreatedAt = null;
-                string prompt = this.ImagePrompt;
-                if (this.ImagePrompt.Contains("\""))
+                if (this.ChatHistory.SelectedItem == null)
                 {
-                    int bfIdx = this.ImagePrompt.IndexOf("\"");
-                    int index = this.ImagePrompt.IndexOf("\"", bfIdx + 1);
-
-                    if (index > bfIdx + 1)
-                    {
-                        prompt = prompt.Substring(bfIdx + 1, index - bfIdx - 1);
-                    }
-                    else
-                    {
-                        prompt = prompt.Substring(bfIdx + 1);
-                    }
+                    return;
                 }
 
-                // ベースのプロンプトが設定されている場合、ベースのプロンプトを付与する
-                if (!string.IsNullOrEmpty(this.WebUICtrl.Prompt))
-                {
-                    prompt = this.WebUICtrl.Prompt + "," + prompt;
-                }
+                var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
 
-                // 画像生成の実行
-                this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
-                this.ChatHistory.Items[curIdx].Prompt = prompt;
-                this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
-                this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
+                // プロンプト生成用チャットの実行
+                var ret = await PromptChat();
+
+                if (ret)
+                {
+                    this.ChatHistory.Items[curIdx].CreatedAt = null;
+                    string prompt = this.ImagePrompt;
+                    if (this.ImagePrompt.Contains("\""))
+                    {
+                        int bfIdx = this.ImagePrompt.IndexOf("\"");
+                        int index = this.ImagePrompt.IndexOf("\"", bfIdx + 1);
+
+                        if (index > bfIdx + 1)
+                        {
+                            prompt = prompt.Substring(bfIdx + 1, index - bfIdx - 1);
+                        }
+                        else
+                        {
+                            prompt = prompt.Substring(bfIdx + 1);
+                        }
+                    }
+
+                    // ベースのプロンプトが設定されている場合、ベースのプロンプトを付与する
+                    if (!string.IsNullOrEmpty(this.WebUICtrl.Prompt))
+                    {
+                        prompt = this.WebUICtrl.Prompt + "," + prompt;
+                    }
+
+                    // 画像生成の実行
+                    this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
+                    this.ChatHistory.Items[curIdx].Prompt = prompt;
+                    this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
+                    this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion
@@ -451,6 +463,10 @@ namespace Zenzai.Models.Zenzai
                         dialog.FileName,
                         zipbaseDir);
 
+                    // 選択要素を一度解除
+                    this.ChatHistory.SelectedItem = null;
+
+                    // xmlファイルをデシリアライズ
                     this.ChatHistory = XMLUtil.Deserialize<ChatManagerModel>(Path.Combine(zipbaseDir, "story.conf"));
 
                     foreach (var chatitem in this.ChatHistory.Items)

@@ -41,11 +41,11 @@ namespace Zenzai.Models.Ollama
         /// <summary>
         /// 選択チャット
         /// </summary>
-        OllapiMessageEx _SelectedItem = new OllapiMessageEx();
+        OllapiMessageEx? _SelectedItem = new OllapiMessageEx();
         /// <summary>
         /// 選択チャット
         /// </summary>
-        public OllapiMessageEx SelectedItem
+        public OllapiMessageEx? SelectedItem
         {
             get
             {

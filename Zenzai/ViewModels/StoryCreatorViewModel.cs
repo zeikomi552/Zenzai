@@ -298,5 +298,22 @@ namespace Zenzai.ViewModels
             }
         }
         #endregion
+
+        #region コンテンツのクリップボードへのコピー
+        /// <summary>
+        /// コンテンツのクリップボードへのコピー
+        /// </summary>
+        public void CopyContent()
+        {
+            try
+            {
+                this.ZenzaiManager.CreateImage();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
     }
 }

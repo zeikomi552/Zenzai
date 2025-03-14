@@ -6,11 +6,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Zenzai.Views"
+             xmlns:Actions="clr-namespace:Zenzai.Common.Actions"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Name="userControl" x:Class="Zenzai.Views.StoryCreator"
              mc:Ignorable="d" Background="{DynamicResource MahApps.Brushes.Control.Background}"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type={x:Type vm:StoryCreatorViewModel}}">
     <UserControl.Resources>
         <Converters:URLStringToImageSourceConverter x:Key="URLStringToImageSourceConverter"/>
+        <Converters:NullToBooleanFalseConverter x:Key="NullToBooleanFalseConverter"/>
     </UserControl.Resources>
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
@@ -71,6 +73,14 @@
                                 <b:Interaction.Triggers>
                                     <b:EventTrigger EventName="Click">
                                         <b:CallMethodAction TargetObject="{Binding}" MethodName="ReCreateImage"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </MenuItem>
+
+                            <MenuItem Header="コンテンツのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="Click">
+                                        <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content}"/>
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
                             </MenuItem>
