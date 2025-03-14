@@ -253,6 +253,11 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
+                if (this.ChatHistory.SelectedItem == null)
+                {
+                    return;
+                }
+
                 var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
 
                 // プロンプト生成用チャットの実行
