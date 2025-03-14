@@ -458,6 +458,10 @@ namespace Zenzai.Models.Zenzai
                         dialog.FileName,
                         zipbaseDir);
 
+                    // 選択要素を一度解除
+                    this.ChatHistory.SelectedItem = null;
+
+                    // xmlファイルをデシリアライズ
                     this.ChatHistory = XMLUtil.Deserialize<ChatManagerModel>(Path.Combine(zipbaseDir, "story.conf"));
 
                     foreach (var chatitem in this.ChatHistory.Items)
