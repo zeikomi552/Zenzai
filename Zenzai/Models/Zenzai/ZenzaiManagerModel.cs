@@ -130,17 +130,51 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
+        #region 会話のカウント
+        /// <summary>
+        /// 会話のカウント
+        /// </summary>
+        int _RemainCount = 10;
+        /// <summary>
+        /// 会話のカウント
+        /// </summary>
+        public int RemainCount
+        {
+            get
+            {
+                return _RemainCount;
+            }
+            set
+            {
+                if (!_RemainCount.Equals(value))
+                {
+                    _RemainCount = value;
+                    RaisePropertyChanged("RemainCount");
+                }
+            }
+        }
+        #endregion
+
         #region 最初のメッセージ
         /// <summary>
         /// 最初のメッセージ
         /// </summary>
-        private async Task<OllapiChatResponse> BaseChat(string message)
+        private async Task<OllapiChatResponse> BaseChat(string systemMessage, string message)
         {
             try
             {
                 // メッセージ送信用リストの作成
                 List<IOllapiMessage> list = new List<IOllapiMessage>();
 
+                int count = 0;
+
+                list.Add(new OllapiMessage()
+                {
+                    Content = systemMessage,
+                    Role = "system",
+                    Images = null,
+                });
+                
                 foreach (var element in this.ChatHistory.Items)
                 {
                     list.Add(new OllapiMessage()
@@ -149,6 +183,8 @@ namespace Zenzai.Models.Zenzai
                         Role = element.Role,
                         Images = element.Images,
                     });
+
+                    count++;
                     if (element.Equals(this.ChatHistory.SelectedItem))
                     {
                         break;
@@ -193,22 +229,22 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// 受信（システム）メッセージ
         /// </summary>
-        string _SystemMessage = string.Empty;
+        string _AssistantMessage = string.Empty;
         /// <summary>
         /// 受信（システム）メッセージ
         /// </summary>
-        public string SystemMessage
+        public string AssistantMessage
         {
             get
             {
-                return _SystemMessage;
+                return _AssistantMessage;
             }
             private set
             {
-                if (_SystemMessage == null || !_SystemMessage.Equals(value))
+                if (_AssistantMessage == null || !_AssistantMessage.Equals(value))
                 {
-                    _SystemMessage = value;
-                    RaisePropertyChanged("SystemMessage");
+                    _AssistantMessage = value;
+                    RaisePropertyChanged("AssistantMessage");
                 }
             }
         }
@@ -229,13 +265,13 @@ namespace Zenzai.Models.Zenzai
 
                 this.UserMessage = message;
 
-                var tmp = await BaseChat(message);
+                var tmp = await BaseChat(this.OllamaCtrl.SystemMessage, message);
 
                 this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
 
                 if (tmp.Message != null)
                 {
-                    this.SystemMessage = tmp.Message.Content;   // 受信メッセージの画面表示
+                    this.AssistantMessage = tmp.Message.Content;   // 受信メッセージの画面表示
                     this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
                     this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
                 }
@@ -251,6 +287,44 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
+        #region チャット
+        /// <summary>
+        /// チャット
+        /// </summary>
+        public async void AutoChat(string message)
+        {
+            try
+            {
+                while (this.RemainCount > 0)
+                {
+                    this.UserMessage = message;
+
+                    // systemのプロンプトをセット
+                    string systemMessage = this.RemainCount % 2 == 0 ? this.OllamaCtrl.SystemMessage : this.OllamaCtrl.SystemMessage2;
+
+                    var tmp = await BaseChat(systemMessage, message);
+                    this.RemainCount--;
+
+                    this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
+
+                    if (tmp.Message != null)
+                    {
+                        message = this.AssistantMessage = tmp.Message.Content;   // 受信メッセージの画面表示
+                        //this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
+                        this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
+                    }
+
+                    // 画像生成の実行
+                    //CreateImage();
+                }
+                this.RemainCount = 10;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
 
         #region 画像生成の実行処理(WebUIを使用)
         /// <summary>
@@ -347,7 +421,7 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                var tmp = await BaseChat(this.OllamaCtrl.PromptMessage);
+                var tmp = await BaseChat(this.OllamaCtrl.SystemMessage, this.OllamaCtrl.PromptMessage);
 
                 if (tmp.Message != null)
                 {
@@ -563,11 +637,11 @@ namespace Zenzai.Models.Zenzai
 
                     if (this.ChatHistory.Items.Count() > index + 1)
                     {
-                        this.SystemMessage = this.ChatHistory.Items.ElementAt(index + 1).Content;
+                        this.AssistantMessage = this.ChatHistory.Items.ElementAt(index + 1).Content;
                     }
                     else
                     {
-                        this.SystemMessage = string.Empty;
+                        this.AssistantMessage = string.Empty;
                     }
                 }
                 else
@@ -581,7 +655,7 @@ namespace Zenzai.Models.Zenzai
                         this.UserMessage = string.Empty;
                     }
 
-                    this.SystemMessage = this.ChatHistory.Items.ElementAt(index).Content;
+                    this.AssistantMessage = this.ChatHistory.Items.ElementAt(index).Content;
                 }
             }
 

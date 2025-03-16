@@ -83,7 +83,30 @@ namespace Zenzai.Models.Ollama
         }
         #endregion
 
-
+        #region システムメッセージ
+        /// <summary>
+        /// システムメッセージ
+        /// </summary>
+        string _SystemMessage2 = string.Empty;
+        /// <summary>
+        /// システムメッセージ
+        /// </summary>
+        public string SystemMessage2
+        {
+            get
+            {
+                return _SystemMessage2;
+            }
+            set
+            {
+                if (_SystemMessage2 == null || !_SystemMessage2.Equals(value))
+                {
+                    _SystemMessage2 = value;
+                    RaisePropertyChanged("SystemMessage2");
+                }
+            }
+        }
+        #endregion
 
         #region Ollamaでの発信側のロール
         /// <summary>
@@ -195,6 +218,7 @@ namespace Zenzai.Models.Ollama
             this.FirstMessage = ctrl.FirstMessage;
             this.PromptMessage = ctrl.PromptMessage;
             this.SystemMessage = ctrl.SystemMessage;
+            this.SystemMessage2 = ctrl.SystemMessage2;
             this.Role = ctrl.Role;
             this.Host = ctrl.Host;
             this.Port = ctrl.Port;
