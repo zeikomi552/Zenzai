@@ -4,6 +4,7 @@ using Ollapi.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,6 +51,7 @@ namespace Zenzai.Models.Ollama
         }
         #endregion
 
+
         #region Configのセット処理
         /// <summary>
         /// Configのセット処理
@@ -59,6 +61,7 @@ namespace Zenzai.Models.Ollama
         {
             this.FirstMessage = config.FirstMessage;
             this.PromptMessage = config.PromptMessage;
+            this.SystemMessage = config.SystemMessage;
             this.Role = config.Role;
             this.Host = config.Host;
             this.Port = config.Port;

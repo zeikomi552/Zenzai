@@ -58,8 +58,10 @@
                         <Border Margin="5" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="1">
                             <TextBlock Margin="10" FontSize="20" TextWrapping="Wrap" Text="{Binding ZenzaiManager.UserMessage, Mode=OneWay}"/>
                         </Border>
-                        <Border Grid.Row="1" Margin="5" CornerRadius="20" BorderBrush="{DynamicResource MahApps.Brushes.ValidationSummary4}" BorderThickness="1">
-                            <TextBlock Foreground="{DynamicResource MahApps.Brushes.ValidationSummary4}" Margin="10" TextWrapping="Wrap"  FontSize="20" Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}"/>
+                        <Border MaxHeight="300" Grid.Row="1" Margin="5" CornerRadius="20" BorderBrush="{DynamicResource MahApps.Brushes.ValidationSummary4}" BorderThickness="1">
+                            <ScrollViewer>
+                                <TextBlock Foreground="{DynamicResource MahApps.Brushes.ValidationSummary4}" Margin="10" TextWrapping="Wrap"  FontSize="20" Text="{Binding ZenzaiManager.SystemMessage, Mode=OneWay}"/>
+                            </ScrollViewer>
                         </Border>
                     </Grid>
                 </Expander>

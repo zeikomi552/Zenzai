@@ -12,6 +12,8 @@ namespace Zenzai.Models.Ollama
 
         public string PromptMessage { get; }
 
+        public string SystemMessage { get; }
+
         public string Role { get; }
 
         public string Host { get; }
