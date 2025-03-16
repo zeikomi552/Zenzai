@@ -299,6 +299,23 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
+        #region 同じプロンプトを使用して画像生成
+        /// <summary>
+        /// 前回のプロンプトで画像再生成
+        /// </summary>
+        public void OldReCreateImage()
+        {
+            try
+            {
+                this.ZenzaiManager.CreateImageBase();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
         #region コンテンツのクリップボードへのコピー
         /// <summary>
         /// コンテンツのクリップボードへのコピー

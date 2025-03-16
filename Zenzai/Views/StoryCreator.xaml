@@ -70,20 +70,45 @@
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="画像再生成">
-                                <b:Interaction.Triggers>
-                                    <b:EventTrigger EventName="Click">
-                                        <b:CallMethodAction TargetObject="{Binding}" MethodName="ReCreateImage"/>
-                                    </b:EventTrigger>
-                                </b:Interaction.Triggers>
+                                <MenuItem Header="画像再生成">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <b:CallMethodAction TargetObject="{Binding}" MethodName="ReCreateImage"/>
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </MenuItem>
+                                <MenuItem Header="前回のプロンプトで画像再生成">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <b:CallMethodAction TargetObject="{Binding}" MethodName="OldReCreateImage"/>
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </MenuItem>
                             </MenuItem>
-
-                            <MenuItem Header="コンテンツのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
-                                <b:Interaction.Triggers>
-                                    <b:EventTrigger EventName="Click">
-                                        <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content}"/>
-                                    </b:EventTrigger>
-                                </b:Interaction.Triggers>
+                            <MenuItem Header="コピー">
+                                <MenuItem Header="コンテンツのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content}"/>
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </MenuItem>
+                                <MenuItem Header="Promptのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Prompt, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Prompt}"/>
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </MenuItem>
+                                <MenuItem Header="Negative Promptのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.NegativePrompt, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.NegativePrompt}"/>
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </MenuItem>
                             </MenuItem>
+                            
                         </ContextMenu>
                     </DataGrid.ContextMenu>
 
