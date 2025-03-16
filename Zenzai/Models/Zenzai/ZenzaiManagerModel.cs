@@ -222,10 +222,16 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
+                if (this.ChatHistory.Items.Count == 0)
+                {
+                    this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "system", Content = this.OllamaCtrl.SystemMessage });
+                }
+
                 this.UserMessage = message;
 
                 var tmp = await BaseChat(message);
+
+                this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
 
                 if (tmp.Message != null)
                 {
@@ -244,6 +250,7 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
+
 
         #region 画像生成の実行処理(WebUIを使用)
         /// <summary>
