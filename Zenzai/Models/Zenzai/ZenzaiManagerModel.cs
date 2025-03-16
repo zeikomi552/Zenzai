@@ -302,6 +302,36 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        public async void CreateImageBase()
+        {
+            try
+            {
+                if (this.ChatHistory.SelectedItem == null)
+                {
+                    return;
+                }
+
+                var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
+
+
+                this.ChatHistory.Items[curIdx].CreatedAt = null;
+
+                // 画像生成の実行
+                this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(this.ChatHistory.Items[curIdx].Prompt);
+                this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
+                this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
         #region プロンプト生成用チャット
         /// <summary>
         /// プロンプト生成用チャット
