@@ -159,14 +159,12 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// 最初のメッセージ
         /// </summary>
-        private async Task<OllapiChatResponse> BaseChat(string systemMessage, string message)
+        private async Task<OllapiChatResponse> BaseChat(string systemMessage)
         {
             try
             {
                 // メッセージ送信用リストの作成
                 List<IOllapiMessage> list = new List<IOllapiMessage>();
-
-                int count = 0;
 
                 list.Add(new OllapiMessage()
                 {
@@ -183,15 +181,9 @@ namespace Zenzai.Models.Zenzai
                         Role = element.Role,
                         Images = element.Images,
                     });
-
-                    count++;
-                    if (element.Equals(this.ChatHistory.SelectedItem))
-                    {
-                        break;
-                    }
                 }
 
-                return await OllamaCtrl.BaseChat(list, message);
+                return await OllamaCtrl.BaseChat(list);
             }
             catch
             {
@@ -199,7 +191,47 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
+        #region 最初のメッセージ
+        /// <summary>
+        /// 最初のメッセージ
+        /// </summary>
+        private async Task<OllapiChatResponse> ImageChat(string systemMessage, string message)
+        {
+            try
+            {
+                // メッセージ送信用リストの作成
+                List<IOllapiMessage> list = new List<IOllapiMessage>();
 
+                list.Add(new OllapiMessage()
+                {
+                    Content = systemMessage,
+                    Role = "system",
+                    Images = null,
+                });
+
+                foreach (var element in this.ChatHistory.Items)
+                {
+                    list.Add(new OllapiMessage()
+                    {
+                        Content = element.Content,
+                        Role = element.Role,
+                        Images = element.Images,
+                    });
+                }
+                list.Add(new OllapiMessage()
+                {
+                    Content = message,
+                    Role = "user",
+                    Images = null,
+                });
+                return await OllamaCtrl.BaseChat(list);
+            }
+            catch
+            {
+                return new OllapiChatResponse();
+            }
+        }
+        #endregion
         #region 送信（ユーザー）メッセージ
         /// <summary>
         /// 送信（ユーザー）メッセージ
@@ -258,16 +290,12 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                if (this.ChatHistory.Items.Count == 0)
-                {
-                    this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "system", Content = this.OllamaCtrl.SystemMessage });
-                }
-
                 this.UserMessage = message;
 
-                var tmp = await BaseChat(this.OllamaCtrl.SystemMessage, message);
-
                 this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
+
+                var tmp = await BaseChat(this.OllamaCtrl.SystemMessage);
+
 
                 if (tmp.Message != null)
                 {
@@ -276,9 +304,12 @@ namespace Zenzai.Models.Zenzai
                     this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
                 }
 
-                // 画像生成の実行
-                CreateImage();
 
+                if (this.ChatHistory.Items.Count > 0)
+                {
+                    // 画像生成の実行
+                    CreateImage(this.ChatHistory.Items.Count - 1);
+                }
             }
             catch (Exception e)
             {
@@ -297,25 +328,38 @@ namespace Zenzai.Models.Zenzai
             {
                 while (this.RemainCount > 0)
                 {
-                    this.UserMessage = message;
+                    // 2周目以降のassistantメッセージは次のユーザーメッセージに変換するためいったん削除する
+                    if (this.ChatHistory.Items.Count > 0)
+                    {
+                        this.ChatHistory.Items.Remove(this.ChatHistory.Items.Last());
+                    }
 
                     // systemのプロンプトをセット
                     string systemMessage = this.RemainCount % 2 == 0 ? this.OllamaCtrl.SystemMessage : this.OllamaCtrl.SystemMessage2;
 
-                    var tmp = await BaseChat(systemMessage, message);
+                    // ユーザーの指定
+                    string user = "user";
+
+
+                    // 会話履歴に追加
+                    this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = user, Content = message });
+
+                    var tmp = await BaseChat(systemMessage);
                     this.RemainCount--;
 
-                    this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
 
                     if (tmp.Message != null)
                     {
                         message = this.AssistantMessage = tmp.Message.Content;   // 受信メッセージの画面表示
-                        //this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
+                        this.ChatHistory.Items.Add(new OllapiMessageEx(tmp.Message));
                         this.ChatHistory.SelectedItem = this.ChatHistory.Items.Last();
                     }
 
-                    // 画像生成の実行
-                    //CreateImage();
+                    if (this.ChatHistory.Items.Count > 0)
+                    {
+                        // 画像生成の実行
+                        CreateImage(this.ChatHistory.Items.Count - 1);
+                    }
                 }
                 this.RemainCount = 10;
             }
@@ -325,22 +369,35 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
-
         #region 画像生成の実行処理(WebUIを使用)
         /// <summary>
         /// 画像生成の実行処理(WebUIを使用)
         /// </summary>
-        public async void CreateImage()
+        public void CreateImage()
         {
             try
             {
-                if (this.ChatHistory.SelectedItem == null)
+                if (this.ChatHistory.SelectedItem != null)
                 {
-                    return;
+                    int curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
+                    CreateImage(curIdx);
                 }
-
-                var curIdx = this.ChatHistory.Items.IndexOf(this.ChatHistory.SelectedItem);
-
+               
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        public async void CreateImage(int curIdx)
+        {
+            try
+            {
                 // プロンプト生成用チャットの実行
                 var ret = await PromptChat();
 
@@ -421,7 +478,7 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                var tmp = await BaseChat(this.OllamaCtrl.SystemMessage, this.OllamaCtrl.PromptMessage);
+                var tmp = await ImageChat(this.OllamaCtrl.SystemMessage, this.OllamaCtrl.PromptMessage);
 
                 if (tmp.Message != null)
                 {

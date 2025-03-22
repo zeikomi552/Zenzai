@@ -10,7 +10,7 @@ namespace Zenzai.Models.Ollama
 {
     public interface IOllamaControllerModel : IOllamaConfig
     {
-        public Task<OllapiChatResponse> BaseChat(List<IOllapiMessage> sourceList, string message);
+        public Task<OllapiChatResponse> BaseChat(List<IOllapiMessage> sourceList);
 
         public void SetConfig(IOllamaConfig config);
     }
