@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zenzai.Models.Zenzai;
 
 namespace Zenzai.Models.Ollama
 {
@@ -58,80 +59,105 @@ namespace Zenzai.Models.Ollama
         }
         #endregion
 
-        #region システムメッセージ
+        #region ペルソナリスト
         /// <summary>
-        /// システムメッセージ
+        /// ペルソナリスト
         /// </summary>
-        string _SystemMessage = string.Empty;
+        PersonaCollection _Personas = new PersonaCollection();
         /// <summary>
-        /// システムメッセージ
+        /// ペルソナリスト
         /// </summary>
-        public string SystemMessage
+        public PersonaCollection Personas
         {
             get
             {
-                return _SystemMessage;
+                return _Personas;
             }
             set
             {
-                if (_SystemMessage == null || !_SystemMessage.Equals(value))
+                if (_Personas == null || !_Personas.Equals(value))
                 {
-                    _SystemMessage = value;
-                    RaisePropertyChanged("SystemMessage");
+                    _Personas = value;
+                    RaisePropertyChanged("Personas");
                 }
             }
         }
         #endregion
 
-        #region システムメッセージ
-        /// <summary>
-        /// システムメッセージ
-        /// </summary>
-        string _SystemMessage2 = string.Empty;
-        /// <summary>
-        /// システムメッセージ
-        /// </summary>
-        public string SystemMessage2
-        {
-            get
-            {
-                return _SystemMessage2;
-            }
-            set
-            {
-                if (_SystemMessage2 == null || !_SystemMessage2.Equals(value))
-                {
-                    _SystemMessage2 = value;
-                    RaisePropertyChanged("SystemMessage2");
-                }
-            }
-        }
-        #endregion
+        //#region システムメッセージ
+        ///// <summary>
+        ///// システムメッセージ
+        ///// </summary>
+        //string _SystemMessage = string.Empty;
+        ///// <summary>
+        ///// システムメッセージ
+        ///// </summary>
+        //public string SystemMessage
+        //{
+        //    get
+        //    {
+        //        return _SystemMessage;
+        //    }
+        //    set
+        //    {
+        //        if (_SystemMessage == null || !_SystemMessage.Equals(value))
+        //        {
+        //            _SystemMessage = value;
+        //            RaisePropertyChanged("SystemMessage");
+        //        }
+        //    }
+        //}
+        //#endregion
 
-        #region Ollamaでの発信側のロール
-        /// <summary>
-        /// Ollamaでの発信側のロール
-        /// </summary>
-        string _Role = "user";
-        /// <summary>
-        /// Ollamaでの発信側のロール
-        /// </summary>
-        public string Role
-        {
-            get
-            {
-                return _Role;
-            }
-            set
-            {
-                if (_Role == null || !_Role.Equals(value))
-                {
-                    _Role = value;
-                    RaisePropertyChanged("Role");
-                }
-            }
-        }
-        #endregion
+        //#region システムメッセージ
+        ///// <summary>
+        ///// システムメッセージ
+        ///// </summary>
+        //string _SystemMessage2 = string.Empty;
+        ///// <summary>
+        ///// システムメッセージ
+        ///// </summary>
+        //public string SystemMessage2
+        //{
+        //    get
+        //    {
+        //        return _SystemMessage2;
+        //    }
+        //    set
+        //    {
+        //        if (_SystemMessage2 == null || !_SystemMessage2.Equals(value))
+        //        {
+        //            _SystemMessage2 = value;
+        //            RaisePropertyChanged("SystemMessage2");
+        //        }
+        //    }
+        //}
+        //#endregion
+
+        //#region Ollamaでの発信側のロール
+        ///// <summary>
+        ///// Ollamaでの発信側のロール
+        ///// </summary>
+        //string _Role = "user";
+        ///// <summary>
+        ///// Ollamaでの発信側のロール
+        ///// </summary>
+        //public string Role
+        //{
+        //    get
+        //    {
+        //        return _Role;
+        //    }
+        //    set
+        //    {
+        //        if (_Role == null || !_Role.Equals(value))
+        //        {
+        //            _Role = value;
+        //            RaisePropertyChanged("Role");
+        //        }
+        //    }
+        //}
+        //#endregion
 
         #region ホスト名
         /// <summary>
@@ -217,9 +243,7 @@ namespace Zenzai.Models.Ollama
         {
             this.FirstMessage = ctrl.FirstMessage;
             this.PromptMessage = ctrl.PromptMessage;
-            this.SystemMessage = ctrl.SystemMessage;
-            this.SystemMessage2 = ctrl.SystemMessage2;
-            this.Role = ctrl.Role;
+            this.Personas = ctrl.Personas;
             this.Host = ctrl.Host;
             this.Port = ctrl.Port;
             this.Model = ctrl.Model;

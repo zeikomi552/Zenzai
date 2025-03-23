@@ -61,6 +61,22 @@
                 </StackPanel>
             </TabItem>
 
+            <TabItem Header="Persona">
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding OllamaConfig.Personas.Items}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding PersonaName}"/>
+                        <DataGridTextColumn Header="Role" Binding="{Binding Role}"/>
+                        <DataGridTemplateColumn Header="Detail">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding PersonaDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            
             <TabItem Header="WebUI">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">

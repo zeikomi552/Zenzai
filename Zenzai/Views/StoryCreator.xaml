@@ -69,66 +69,77 @@
                 </Expander>
             </Grid>
             <Expander Grid.Column="1">
-                <DataGrid AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text="Persona"/>
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                        <ComboBox ItemsSource="{Binding ZenzaiManager.OllamaCtrl.Personas.Items}" DisplayMemberPath="PersonaName" SelectedItem="{Binding ZenzaiManager.OllamaCtrl.Personas.SelectedItem}"/>
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
                           ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="画像再生成">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
                                 <MenuItem Header="画像再生成">
-                                    <b:Interaction.Triggers>
-                                        <b:EventTrigger EventName="Click">
-                                            <b:CallMethodAction TargetObject="{Binding}" MethodName="ReCreateImage"/>
-                                        </b:EventTrigger>
-                                    </b:Interaction.Triggers>
+                                    <MenuItem Header="画像再生成">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <b:CallMethodAction TargetObject="{Binding}" MethodName="ReCreateImage"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </MenuItem>
+                                    <MenuItem Header="前回のプロンプトで画像再生成">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <b:CallMethodAction TargetObject="{Binding}" MethodName="OldReCreateImage"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </MenuItem>
                                 </MenuItem>
-                                <MenuItem Header="前回のプロンプトで画像再生成">
-                                    <b:Interaction.Triggers>
-                                        <b:EventTrigger EventName="Click">
-                                            <b:CallMethodAction TargetObject="{Binding}" MethodName="OldReCreateImage"/>
-                                        </b:EventTrigger>
-                                    </b:Interaction.Triggers>
+                                <MenuItem Header="コピー">
+                                    <MenuItem Header="コンテンツのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </MenuItem>
+                                    <MenuItem Header="Promptのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Prompt, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Prompt}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </MenuItem>
+                                    <MenuItem Header="Negative Promptのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.NegativePrompt, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.NegativePrompt}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </MenuItem>
                                 </MenuItem>
-                            </MenuItem>
-                            <MenuItem Header="コピー">
-                                <MenuItem Header="コンテンツのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
-                                    <b:Interaction.Triggers>
-                                        <b:EventTrigger EventName="Click">
-                                            <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Content}"/>
-                                        </b:EventTrigger>
-                                    </b:Interaction.Triggers>
-                                </MenuItem>
-                                <MenuItem Header="Promptのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.Prompt, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
-                                    <b:Interaction.Triggers>
-                                        <b:EventTrigger EventName="Click">
-                                            <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.Prompt}"/>
-                                        </b:EventTrigger>
-                                    </b:Interaction.Triggers>
-                                </MenuItem>
-                                <MenuItem Header="Negative Promptのコピー" IsEnabled="{Binding ZenzaiManager.ChatHistory.SelectedItem.NegativePrompt, Converter={StaticResource NullToBooleanFalseConverter}, FallbackValue=False}">
-                                    <b:Interaction.Triggers>
-                                        <b:EventTrigger EventName="Click">
-                                            <Actions:ClipboardCopyAction CopyText="{Binding ZenzaiManager.ChatHistory.SelectedItem.NegativePrompt}"/>
-                                        </b:EventTrigger>
-                                    </b:Interaction.Triggers>
-                                </MenuItem>
-                            </MenuItem>
-                            
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="CreatedAt" Binding="{Binding CreatedAt}"/>
-                    </DataGrid.Columns>
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:CallMethodAction TargetObject="{Binding}" MethodName="SelectionChanged"/>
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </DataGrid>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="CreatedAt" Binding="{Binding CreatedAt}"/>
+                        </DataGrid.Columns>
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:CallMethodAction TargetObject="{Binding}" MethodName="SelectionChanged"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </DataGrid>
+                </Grid>
             </Expander>
         </Grid>
         <Grid  Grid.Row="1" Background="{DynamicResource MahApps.Brushes.MenuItem.SelectionFill}">

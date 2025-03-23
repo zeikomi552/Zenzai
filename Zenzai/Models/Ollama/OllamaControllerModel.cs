@@ -54,9 +54,7 @@ namespace Zenzai.Models.Ollama
         {
             this.FirstMessage = config.FirstMessage;
             this.PromptMessage = config.PromptMessage;
-            this.SystemMessage = config.SystemMessage;
-            this.SystemMessage2 = config.SystemMessage2;
-            this.Role = config.Role;
+            this.Personas = config.Personas;
             this.Host = config.Host;
             this.Port = config.Port;
             this.Model = config.Model;

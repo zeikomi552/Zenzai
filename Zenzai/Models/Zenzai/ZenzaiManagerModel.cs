@@ -294,7 +294,7 @@ namespace Zenzai.Models.Zenzai
 
                 this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
 
-                var tmp = await BaseChat(this.OllamaCtrl.SystemMessage);
+                var tmp = await BaseChat(this.OllamaCtrl.Personas.SelectedItem.PersonaDetail);
 
 
                 if (tmp.Message != null)
@@ -335,7 +335,8 @@ namespace Zenzai.Models.Zenzai
                     }
 
                     // systemのプロンプトをセット
-                    string systemMessage = this.RemainCount % 2 == 0 ? this.OllamaCtrl.SystemMessage : this.OllamaCtrl.SystemMessage2;
+                    string systemMessage = this.RemainCount % 2 == 0 
+                        ? this.OllamaCtrl.Personas.Items.ElementAt(0).PersonaDetail : this.OllamaCtrl.Personas.Items.ElementAt(1).PersonaDetail;
 
                     // ユーザーの指定
                     string user = "user";
@@ -478,7 +479,7 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                var tmp = await ImageChat(this.OllamaCtrl.SystemMessage, this.OllamaCtrl.PromptMessage);
+                var tmp = await ImageChat(this.OllamaCtrl.Personas.SelectedItem.PersonaDetail, this.OllamaCtrl.PromptMessage);
 
                 if (tmp.Message != null)
                 {
