@@ -48,16 +48,6 @@
                         <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
                         <TextBox AcceptsReturn="True" Margin="5" Width="500" Height="70" VerticalAlignment="Center" Text="{Binding OllamaConfig.PromptMessage}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="SystemMessage"/>
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <TextBox AcceptsReturn="True" Margin="5" Width="500" Height="70" VerticalAlignment="Center" Text="{Binding OllamaConfig.SystemMessage}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="SystemMessage2"/>
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <TextBox AcceptsReturn="True" Margin="5" Width="500" Height="70" VerticalAlignment="Center" Text="{Binding OllamaConfig.SystemMessage2}"/>
-                    </StackPanel>
                 </StackPanel>
             </TabItem>
 
