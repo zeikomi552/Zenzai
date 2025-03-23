@@ -26,11 +26,12 @@ namespace Zenzai.Models.Zenzai
 
         }
 
-        public OllapiMessageEx(OllapiMessage message )
+        public OllapiMessageEx(OllapiMessage message, string personaName )
         {
             this.Role = message.Role;
             this.Content = message.Content;
             this.Images = message.Images;
+            this.PersonaName = personaName;
         }
 
         #region ファイルパス[FilePath]プロパティ
@@ -132,6 +133,31 @@ namespace Zenzai.Models.Zenzai
         }
         #endregion
 
+        #region ペルソナ名
+        /// <summary>
+        /// ペルソナ名
+        /// </summary>
+        string _PersonaName = string.Empty;
+        /// <summary>
+        /// ペルソナ名
+        /// </summary>
+        public string PersonaName
+        {
+            get
+            {
+                return _PersonaName;
+            }
+            set
+            {
+                if (_PersonaName == null || !_PersonaName.Equals(value))
+                {
+                    _PersonaName = value;
+                    RaisePropertyChanged("PersonaName");
+                }
+            }
+        }
+        #endregion
+
 
 
         #region コピー処理
@@ -148,6 +174,7 @@ namespace Zenzai.Models.Zenzai
                 Images = this.Images,
                 NegativePrompt = this.NegativePrompt,
                 Role = this.Role,
+                PersonaName = this.PersonaName,
                 Prompt = this.Prompt,
                 CreatedAt = this.CreatedAt,
             };

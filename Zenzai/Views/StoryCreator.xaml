@@ -127,6 +127,7 @@
                         </DataGrid.ContextMenu>
 
                         <DataGrid.Columns>
+                            <DataGridTextColumn IsReadOnly="True" Header="Persona" Binding="{Binding PersonaName}"/>
                             <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}"/>
                             <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>
                             <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
