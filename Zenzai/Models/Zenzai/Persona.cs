@@ -12,7 +12,7 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// Ollamaでの発信側のロール
         /// </summary>
-        string _Role = "user";
+        string _Role = "system";
         /// <summary>
         /// Ollamaでの発信側のロール
         /// </summary>

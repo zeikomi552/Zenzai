@@ -159,7 +159,7 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// 最初のメッセージ
         /// </summary>
-        private async Task<OllapiChatResponse> BaseChat(string systemMessage)
+        private async Task<OllapiChatResponse> BaseChat(Persona persona)
         {
             try
             {
@@ -168,8 +168,8 @@ namespace Zenzai.Models.Zenzai
 
                 list.Add(new OllapiMessage()
                 {
-                    Content = systemMessage,
-                    Role = "system",
+                    Content = persona.PersonaDetail,
+                    Role = persona.Role,
                     Images = null,
                 });
                 
@@ -290,11 +290,17 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
+                if (this.OllamaCtrl.Personas.SelectedItem == null)
+                {
+                    ShowMessage.ShowNoticeOK("ペルソナを選択してください", "通知");
+                    return;
+                }
+
                 this.UserMessage = message;
 
                 this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = "user", Content = message });
 
-                var tmp = await BaseChat(this.OllamaCtrl.Personas.SelectedItem.PersonaDetail);
+                var tmp = await BaseChat(this.OllamaCtrl.Personas.SelectedItem);
 
 
                 if (tmp.Message != null)
@@ -326,6 +332,12 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
+                if (this.OllamaCtrl.Personas.Items.Count <= 1)
+                {
+                    ShowMessage.ShowNoticeOK("ペルソナを2人以上設定してください", "通知");
+                    return;
+                }
+
                 while (this.RemainCount > 0)
                 {
                     // 2周目以降のassistantメッセージは次のユーザーメッセージに変換するためいったん削除する
@@ -335,17 +347,16 @@ namespace Zenzai.Models.Zenzai
                     }
 
                     // systemのプロンプトをセット
-                    string systemMessage = this.RemainCount % 2 == 0 
-                        ? this.OllamaCtrl.Personas.Items.ElementAt(0).PersonaDetail : this.OllamaCtrl.Personas.Items.ElementAt(1).PersonaDetail;
+                    Persona tmp_persona = this.OllamaCtrl.Personas.Items.ElementAt(this.RemainCount % this.OllamaCtrl.Personas.Items.Count);
 
                     // ユーザーの指定
-                    string user = "user";
+                    string user = tmp_persona.Role;
 
 
                     // 会話履歴に追加
                     this.ChatHistory.Items.Add(new OllapiMessageEx() { Role = user, Content = message });
 
-                    var tmp = await BaseChat(systemMessage);
+                    var tmp = await BaseChat(this.OllamaCtrl.Personas.SelectedItem);
                     this.RemainCount--;
 
 
