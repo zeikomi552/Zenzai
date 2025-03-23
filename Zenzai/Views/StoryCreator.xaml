@@ -77,7 +77,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="5" VerticalAlignment="Center" Text="Persona"/>
                         <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <ComboBox ItemsSource="{Binding ZenzaiManager.OllamaCtrl.Personas.Items}" DisplayMemberPath="PersonaName" SelectedItem="{Binding ZenzaiManager.OllamaCtrl.Personas.SelectedItem}"/>
+                        <ComboBox Margin="5" VerticalAlignment="Center" MinWidth="100"  ItemsSource="{Binding ZenzaiManager.OllamaCtrl.Personas.Items}" DisplayMemberPath="PersonaName" SelectedItem="{Binding ZenzaiManager.OllamaCtrl.Personas.SelectedItem}"/>
                     </StackPanel>
                     <DataGrid Grid.Row="1" AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
                           ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
