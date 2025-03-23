@@ -75,9 +75,20 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text="Persona"/>
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <ComboBox Margin="5" VerticalAlignment="Center" MinWidth="100"  ItemsSource="{Binding ZenzaiManager.OllamaCtrl.Personas.Items}" DisplayMemberPath="PersonaName" SelectedItem="{Binding ZenzaiManager.OllamaCtrl.Personas.SelectedItem}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" VerticalAlignment="Center" Text="Persona"/>
+                            <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                            <ComboBox Margin="5" VerticalAlignment="Center" MinWidth="100" 
+                                      ItemsSource="{Binding ZenzaiManager.OllamaCtrl.Personas.Items}"
+                                      DisplayMemberPath="PersonaName" SelectedItem="{Binding ZenzaiManager.OllamaCtrl.Personas.SelectedItem}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" VerticalAlignment="Center" Text="Prompt"/>
+                            <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                            <ComboBox Margin="5" VerticalAlignment="Center" MinWidth="100" 
+                                      ItemsSource="{Binding ZenzaiManager.WebUICtrl.Prompts.Items}"
+                                      DisplayMemberPath="Name" SelectedItem="{Binding ZenzaiManager.WebUICtrl.Prompts.SelectedItem}"/>
+                        </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="1" AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
                           ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
@@ -130,8 +141,8 @@
                             <DataGridTextColumn IsReadOnly="True" Header="Persona" Binding="{Binding PersonaName}"/>
                             <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}"/>
                             <DataGridTextColumn IsReadOnly="True" Header="Content" Binding="{Binding Content}"/>
-                            <DataGridTextColumn IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
-                            <DataGridTextColumn IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
+                            <DataGridTextColumn Width="200" IsReadOnly="True" Header="Prompt" Binding="{Binding Prompt}"/>
+                            <DataGridTextColumn Width="200" IsReadOnly="True" Header="Negative" Binding="{Binding NegativePrompt}"/>
                             <DataGridTextColumn IsReadOnly="True" Header="CreatedAt" Binding="{Binding CreatedAt}"/>
                         </DataGrid.Columns>
                         <b:Interaction.Triggers>

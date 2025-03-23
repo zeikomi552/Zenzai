@@ -13,8 +13,7 @@ namespace Zenzai.Models.A1111
         public string WebuiOutputDirectory { get; }
         public string WebuiCurrentDirectory { get; }
 
-        public string Prompt { get; }
-        public string NegativePrompt { get; }
+        public SdPromptCollection Prompts { get; }
 
         public int Steps { get; }
         public int Width { get; }

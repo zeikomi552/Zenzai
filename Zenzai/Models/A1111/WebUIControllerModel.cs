@@ -79,7 +79,7 @@ namespace Zenzai.Models.A1111
                 string url = this.WebuiUri;
                 string outdir = this.WebuiOutputDirectory;
                 this.WebUI.Request.PromptItem.Prompt = prompt;
-                this.WebUI.Request.PromptItem.NegativePrompt = this.NegativePrompt;
+                this.WebUI.Request.PromptItem.NegativePrompt = this.Prompts.SelectedItem.NegativePrompt;
                 this.WebUI.Request.PromptItem.Steps = this.Steps;
                 this.WebUI.Request.PromptItem.Width = this.Width;
                 this.WebUI.Request.PromptItem.Height = this.Height;
@@ -139,9 +139,7 @@ namespace Zenzai.Models.A1111
             this.WebuiUri = config.WebuiUri;
             this.WebuiOutputDirectory = config.WebuiOutputDirectory;
             this.WebuiCurrentDirectory = config.WebuiCurrentDirectory;
-            this.NegativePrompt = config.NegativePrompt;
-            this.Prompt = config.Prompt;
-
+            this.Prompts = config.Prompts;
             this.Steps = config.Steps;
             this.Width = config.Width;
             this.Height = config.Height;

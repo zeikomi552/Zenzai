@@ -88,55 +88,30 @@ namespace Zenzai.Models.A1111
         }
         #endregion
 
-        #region ネガティブプロンプト
+        #region プロンプトリスト
         /// <summary>
-        /// ネガティブプロンプト
+        /// プロンプトリスト
         /// </summary>
-        string _Prompt = "";
+        SdPromptCollection _Prompts = new SdPromptCollection();
         /// <summary>
-        /// ネガティブプロンプト
+        /// プロンプトリスト
         /// </summary>
-        public string Prompt
+        public SdPromptCollection Prompts
         {
             get
             {
-                return _Prompt;
+                return _Prompts;
             }
             set
             {
-                if (_Prompt == null || !_Prompt.Equals(value))
+                if (_Prompts == null || !_Prompts.Equals(value))
                 {
-                    _Prompt = value;
-                    RaisePropertyChanged("Prompt");
+                    _Prompts = value;
+                    RaisePropertyChanged("Prompts");
                 }
             }
         }
         #endregion
-        #region ネガティブプロンプト
-        /// <summary>
-        /// ネガティブプロンプト
-        /// </summary>
-        string _NegativePrompt = "EasyNegative";
-        /// <summary>
-        /// ネガティブプロンプト
-        /// </summary>
-        public string NegativePrompt
-        {
-            get
-            {
-                return _NegativePrompt;
-            }
-            set
-            {
-                if (_NegativePrompt == null || !_NegativePrompt.Equals(value))
-                {
-                    _NegativePrompt = value;
-                    RaisePropertyChanged("NegativePrompt");
-                }
-            }
-        }
-        #endregion
-
 
         #region Steps[Steps]プロパティ
         /// <summary>
@@ -428,8 +403,7 @@ namespace Zenzai.Models.A1111
             this.WebuiUri = ctrl.WebuiUri;
             this.WebuiOutputDirectory = ctrl.WebuiOutputDirectory;
             this.WebuiCurrentDirectory = ctrl.WebuiCurrentDirectory;
-            this.NegativePrompt = ctrl.NegativePrompt;
-            this.Prompt = ctrl.Prompt;
+            this.Prompts = ctrl.Prompts;
 
             this.Steps = ctrl.Steps;
             this.Width = ctrl.Width;
@@ -457,8 +431,8 @@ namespace Zenzai.Models.A1111
 
             var data = new
             {
-                prompt = prompt.Prompt,
-                negative_prompt = prompt.NegativePrompt,
+                prompt = prompt.Prompts.SelectedItem.Prompt,
+                negative_prompt = prompt.Prompts.SelectedItem.Prompt,
                 steps = prompt.Steps,
                 width = prompt.Width,
                 height = prompt.Height,

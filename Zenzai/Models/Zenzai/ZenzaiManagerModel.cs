@@ -414,6 +414,11 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
+                if (this.WebUICtrl.Prompts.SelectedItem == null)
+                    return;
+
+                var tmpPrompt = this.WebUICtrl.Prompts.SelectedItem;
+
                 // プロンプト生成用チャットの実行
                 var ret = await PromptChat();
 
@@ -437,15 +442,16 @@ namespace Zenzai.Models.Zenzai
                     }
 
                     // ベースのプロンプトが設定されている場合、ベースのプロンプトを付与する
-                    if (!string.IsNullOrEmpty(this.WebUICtrl.Prompt))
+                    if (this.WebUICtrl.Prompts.SelectedItem != null)
                     {
-                        prompt = this.WebUICtrl.Prompt + "," + prompt;
+                        prompt = tmpPrompt.Prompt + "," + prompt;
+
                     }
 
                     // 画像生成の実行
                     this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(prompt);
                     this.ChatHistory.Items[curIdx].Prompt = prompt;
-                    this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
+                    this.ChatHistory.Items[curIdx].NegativePrompt = tmpPrompt.NegativePrompt;
                     this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
                 }
             }
@@ -476,7 +482,7 @@ namespace Zenzai.Models.Zenzai
 
                 // 画像生成の実行
                 this.ChatHistory.Items[curIdx].FilePath = await this.WebUICtrl.ExecutePrompt(this.ChatHistory.Items[curIdx].Prompt);
-                this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.NegativePrompt;
+                this.ChatHistory.Items[curIdx].NegativePrompt = this.WebUICtrl.Prompts.SelectedItem.NegativePrompt;
                 this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
             }
             catch (Exception e)
