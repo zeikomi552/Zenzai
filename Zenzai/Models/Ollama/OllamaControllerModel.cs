@@ -16,17 +16,10 @@ namespace Zenzai.Models.Ollama
         /// <summary>
         /// 最初のメッセージ
         /// </summary>
-        public async Task<OllapiChatResponse> BaseChat(List<IOllapiMessage> sourceList, string message)
+        public async Task<OllapiChatResponse> BaseChat(List<IOllapiMessage> sourceList)
         {
             try
             {
-                // 新しいメッセージを追加
-                sourceList.Add(new OllapiMessage()
-                {
-                    Role = this.Role,
-                    Content = message,
-                });
-
                 // Ollapiの起動
                 var ollapi = new OllapiChatRequest(this.Host, this.Port, this.Model);
 
@@ -61,8 +54,7 @@ namespace Zenzai.Models.Ollama
         {
             this.FirstMessage = config.FirstMessage;
             this.PromptMessage = config.PromptMessage;
-            this.SystemMessage = config.SystemMessage;
-            this.Role = config.Role;
+            this.Personas = config.Personas;
             this.Host = config.Host;
             this.Port = config.Port;
             this.Model = config.Model;

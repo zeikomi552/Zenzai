@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zenzai.Models.Zenzai;
 
 namespace Zenzai.Models.Ollama
 {
@@ -12,9 +13,7 @@ namespace Zenzai.Models.Ollama
 
         public string PromptMessage { get; }
 
-        public string SystemMessage { get; }
-
-        public string Role { get; }
+        public PersonaCollection Personas { get; }
 
         public string Host { get; }
 

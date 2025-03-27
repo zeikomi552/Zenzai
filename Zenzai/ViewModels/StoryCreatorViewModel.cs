@@ -53,6 +53,10 @@ namespace Zenzai.ViewModels
         private DelegateCommand? _ChatCommand;
         public DelegateCommand ChatCommand => _ChatCommand ?? (_ChatCommand = new DelegateCommand(Chat));
 
+        private DelegateCommand? _AutoChatCommand;
+        public DelegateCommand AutoChatCommand => _AutoChatCommand ?? (_AutoChatCommand = new DelegateCommand(AutoChat));
+
+
         private DelegateCommand? _SaveCommand;
         public DelegateCommand SaveCommand => _SaveCommand ?? (_SaveCommand = new DelegateCommand(Save));
 
@@ -144,6 +148,21 @@ namespace Zenzai.ViewModels
             }
         }
         #endregion
+
+        public void AutoChat()
+        {
+            try
+            {
+                // 最初のチャット
+                this.ZenzaiManager.AutoChat(this.SendMessage);
+
+                this.SendMessage = string.Empty;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         #region ダイアログの表示
         /// <summary>
