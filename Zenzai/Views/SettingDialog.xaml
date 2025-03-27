@@ -75,16 +75,6 @@
                         <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding WebUIConfig.WebuiUri}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Prompt"/>
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <TextBox AcceptsReturn="True" Margin="5" Height="70" Width="500" VerticalAlignment="Center" Text="{Binding WebUIConfig.Prompt}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="NegativePrompt"/>
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <TextBox AcceptsReturn="True" Margin="5" Height="70" Width="500" VerticalAlignment="Center" Text="{Binding WebUIConfig.NegativePrompt}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Steps"/>
                         <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
                         <TextBox AcceptsReturn="True" Margin="5" Width="50" VerticalAlignment="Center" Text="{Binding WebUIConfig.Steps}"/>
