@@ -470,10 +470,11 @@ namespace Zenzai.Models.Zenzai
         {
             try
             {
-                if (string.IsNullOrEmpty(this.WebUICtrl.CheckPoint))
+                if (this.WebUICtrl.CheckPoint == null 
+                    || string.IsNullOrEmpty(this.WebUICtrl.CheckPoint.ModelName))
                     return;
 
-                var ret = await this.WebUICtrl.SetCheckpoint(this.WebUICtrl.CheckPoint, this.WebUICtrl.CLIPStopAtLastLayers);
+                var ret = await this.WebUICtrl.SetCheckpoint(this.WebUICtrl.CheckPoint.ModelName, this.WebUICtrl.CLIPStopAtLastLayers);
             }
             catch (Exception e)
             {
@@ -486,15 +487,19 @@ namespace Zenzai.Models.Zenzai
         /// <summary>
         /// 画像生成の実行処理(WebUIを使用)
         /// </summary>
-        public async void GetOptions()
+        public async void GetCheckPointList()
         {
-            try
+            bool ret = false;
+            while (!ret)
             {
-                var ret = await this.WebUICtrl.GetCheckpointList();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                try
+                {
+                    ret = await this.WebUICtrl.GetCheckPointList();
+                }
+                catch
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
             }
         }
         #endregion

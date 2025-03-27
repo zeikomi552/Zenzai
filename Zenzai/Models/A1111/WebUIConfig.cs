@@ -1,12 +1,15 @@
 ﻿using Stdapi.Enums;
+using Stdapi.Models.Get;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Zenzai.Models.A1111
 {
@@ -112,16 +115,42 @@ namespace Zenzai.Models.A1111
             }
         }
         #endregion
+        #region チェックポイントリスト
+        /// <summary>
+        /// チェックポイントリスト
+        /// </summary>
+        [XmlIgnore]
+        ObservableCollection<GetSdModels> _CheckPointList = new ObservableCollection<GetSdModels>();
+        /// <summary>
+        /// チェックポイントリスト
+        /// </summary>
+        public ObservableCollection<GetSdModels> CheckPointList
+        {
+            get
+            {
+                return _CheckPointList;
+            }
+            set
+            {
+                if (_CheckPointList == null || !_CheckPointList.Equals(value))
+                {
+                    _CheckPointList = value;
+                    RaisePropertyChanged("CheckPointList");
+                }
+            }
+        }
+        #endregion
+
 
         #region 使用するモデル
         /// <summary>
         /// 使用するモデル
         /// </summary>
-        string _CheckPoint = string.Empty;
+        GetSdModels _CheckPoint = new GetSdModels();
         /// <summary>
         /// 使用するモデル
         /// </summary>
-        public string CheckPoint
+        public GetSdModels CheckPoint
         {
             get
             {

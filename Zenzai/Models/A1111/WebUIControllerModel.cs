@@ -39,31 +39,6 @@ namespace Zenzai.Models.A1111
         }
         #endregion
 
-        #region チェックポイントリスト
-        /// <summary>
-        /// チェックポイントリスト
-        /// </summary>
-        ObservableCollection<GetSdModels> _CheckPointList = new ObservableCollection<GetSdModels>();
-        /// <summary>
-        /// チェックポイントリスト
-        /// </summary>
-        public ObservableCollection<GetSdModels> CheckPointList
-        {
-            get
-            {
-                return _CheckPointList;
-            }
-            set
-            {
-                if (_CheckPointList == null || !_CheckPointList.Equals(value))
-                {
-                    _CheckPointList = value;
-                    RaisePropertyChanged("CheckPointList");
-                }
-            }
-        }
-        #endregion
-
         #region コンストラクタ
         /// <summary>
         /// コンストラクタ
@@ -163,7 +138,7 @@ namespace Zenzai.Models.A1111
         /// <summary>
         /// Promptの実行処理
         /// </summary>
-        public async Task<bool> GetCheckpointList()
+        public async Task<bool> GetCheckPointList()
         {
             try
             {
@@ -172,10 +147,9 @@ namespace Zenzai.Models.A1111
                 this.CheckPointList = new ObservableCollection<GetSdModels>(await client.SdModelsRequest(url));
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                ShowMessage.ShowErrorOK(ex.Message, "Error");
-                return false;
+                throw;
             }
         }
         #endregion

@@ -1,6 +1,8 @@
 ﻿using Stdapi.Enums;
+using Stdapi.Models.Get;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +16,8 @@ namespace Zenzai.Models.A1111
         public string WebuiCurrentDirectory { get; }
 
         public SdPromptCollection Prompts { get; }
-
-        public string CheckPoint { get; }
+        public ObservableCollection<GetSdModels> CheckPointList { get; }
+        public GetSdModels CheckPoint { get; }
 
         public int CLIPStopAtLastLayers { get; }
 

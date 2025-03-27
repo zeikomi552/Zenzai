@@ -17,6 +17,6 @@ namespace Zenzai.Models.A1111
         public void SetConfig(IWebUIConfig config);
         public Task<bool> SetCheckpoint(string checkpoint, int clip_CLIP_stop_at_last_layers);
 
-        public Task<bool> GetCheckpointList();
+        public Task<bool> GetCheckPointList();
     }
 }

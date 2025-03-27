@@ -121,6 +121,8 @@ namespace Zenzai.ViewModels
                 // 初期化処理
                 this.ZenzaiManager.Initialize();
                 this.SendMessage = this.ZenzaiManager.OllamaCtrl.FirstMessage;
+
+                this.ZenzaiManager.GetCheckPointList();
             }
             catch (Exception e)
             {
@@ -335,11 +337,11 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
-        #region 画像の再作成処理
+        #region Checkpoint(モデル)のセット処理
         /// <summary>
-        /// 画像の再作成処理
+        /// Checkpoint(モデル)のセット処理
         /// </summary>
-        public void SetOptions()
+        public void SetCheckPoint()
         {
             try
             {
@@ -352,15 +354,15 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
-        #region 画像の再作成処理
+        #region Checkpoint(モデル)リストの取得処理
         /// <summary>
-        /// 画像の再作成処理
+        /// Checkpoint(モデル)リストの取得処理
         /// </summary>
-        public void GetOptions()
+        public void GetCheckPointList()
         {
             try
             {
-                this.ZenzaiManager.GetOptions();
+                this.ZenzaiManager.GetCheckPointList();
             }
             catch (Exception e)
             {

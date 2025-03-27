@@ -93,8 +93,16 @@
                             <TextBlock Margin="5" VerticalAlignment="Center" Text="Checkpoint"/>
                             <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
                             <ComboBox Margin="5" VerticalAlignment="Center" MinWidth="100" 
-                                      ItemsSource="{Binding ZenzaiManager.WebUICtrl.Prompts.Items}"
-                                      DisplayMemberPath="Name" SelectedItem="{Binding ZenzaiManager.WebUICtrl.CheckPoint}"/>
+                                      ItemsSource="{Binding ZenzaiManager.WebUICtrl.CheckPointList}"
+                                      DisplayMemberPath="ModelName" SelectedItem="{Binding ZenzaiManager.WebUICtrl.CheckPoint}">
+                            </ComboBox>
+                            <Button Content="反映">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="Click">
+                                        <b:CallMethodAction TargetObject="{Binding}" MethodName="SetCheckPoint"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="1" AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
