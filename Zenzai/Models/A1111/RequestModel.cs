@@ -55,7 +55,38 @@ namespace Zenzai.Models.A1111
         }
         #endregion
 
+        #region POSTのリクエスト実行処理
+        /// <summary>
+        /// POSTのリクエスト実行処理
+        /// </summary>
+        /// <param name="uri">URI</param>
+        /// <param name="outdir">出力先ディレクトリ</param>
+        public async Task<bool> PostOptions(string uri, string checkpoint, int clip_CLIP_stop_at_last_layers)
+        {
+            try
+            {
+                StdClient client = new StdClient();
 
+                var ret = await client.PostOptionsRequest(uri, new Stdapi.Models.Post.PostOptions()
+                {
+                    SdModelCheckpoint = checkpoint,
+                    CLIPStopAtLastLayers = clip_CLIP_stop_at_last_layers
+                });
+
+                return (ret.Equals("null"));
+            }
+            catch (JSONDeserializeException e)
+            {
+                string msg = e.Message + "\r\n" + e.JSON;
+                ShowMessage.ShowErrorOK(msg, "Error");
+                return (false);
+            }
+            finally
+            {
+
+            }
+        }
+        #endregion
         #region プロンプト要素[PromptItem]プロパティ
         /// <summary>
         /// プロンプト要素[PromptItem]プロパティ用変数

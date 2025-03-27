@@ -43,7 +43,7 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
-
+        
         #region WebUI用コントローラー
         /// <summary>
         /// WebUI用コントローラー
@@ -454,6 +454,43 @@ namespace Zenzai.Models.Zenzai
                     this.ChatHistory.Items[curIdx].NegativePrompt = tmpPrompt.NegativePrompt;
                     this.ChatHistory.Items[curIdx].CreatedAt = DateTime.Now;
                 }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        public async void SetOptions()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(this.WebUICtrl.CheckPoint))
+                    return;
+
+                var ret = await this.WebUICtrl.SetCheckpoint(this.WebUICtrl.CheckPoint, this.WebUICtrl.CLIPStopAtLastLayers);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        public async void GetOptions()
+        {
+            try
+            {
+                var ret = await this.WebUICtrl.GetCheckpointList();
             }
             catch (Exception e)
             {

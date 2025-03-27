@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stdapi.Models.Get;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,8 @@ namespace Zenzai.Models.A1111
         public Task<string> ExecutePrompt(string prompt);
 
         public void SetConfig(IWebUIConfig config);
+        public Task<bool> SetCheckpoint(string checkpoint, int clip_CLIP_stop_at_last_layers);
+
+        public Task<bool> GetCheckpointList();
     }
 }

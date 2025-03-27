@@ -15,6 +15,10 @@ namespace Zenzai.Models.A1111
 
         public SdPromptCollection Prompts { get; }
 
+        public string CheckPoint { get; }
+
+        public int CLIPStopAtLastLayers { get; }
+
         public int Steps { get; }
         public int Width { get; }
         public int Height { get; }

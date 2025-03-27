@@ -113,6 +113,56 @@ namespace Zenzai.Models.A1111
         }
         #endregion
 
+        #region 使用するモデル
+        /// <summary>
+        /// 使用するモデル
+        /// </summary>
+        string _CheckPoint = string.Empty;
+        /// <summary>
+        /// 使用するモデル
+        /// </summary>
+        public string CheckPoint
+        {
+            get
+            {
+                return _CheckPoint;
+            }
+            set
+            {
+                if (_CheckPoint == null || !_CheckPoint.Equals(value))
+                {
+                    _CheckPoint = value;
+                    RaisePropertyChanged("CheckPoint");
+                }
+            }
+        }
+        #endregion
+
+        #region CLIP_stop_at_last_layers
+        /// <summary>
+        /// CLIP_stop_at_last_layers
+        /// </summary>
+        int _CLIPStopAtLastLayers = 2;
+        /// <summary>
+        /// CLIP_stop_at_last_layers
+        /// </summary>
+        public int CLIPStopAtLastLayers
+        {
+            get
+            {
+                return _CLIPStopAtLastLayers;
+            }
+            set
+            {
+                if (!_CLIPStopAtLastLayers.Equals(value))
+                {
+                    _CLIPStopAtLastLayers = value;
+                    RaisePropertyChanged("CLIPStopAtLastLayers");
+                }
+            }
+        }
+        #endregion
+
         #region Steps[Steps]プロパティ
         /// <summary>
         /// Steps[Steps]プロパティ用変数

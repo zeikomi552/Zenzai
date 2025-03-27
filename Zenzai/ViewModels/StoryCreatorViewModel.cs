@@ -335,6 +335,40 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
+        #region 画像の再作成処理
+        /// <summary>
+        /// 画像の再作成処理
+        /// </summary>
+        public void SetOptions()
+        {
+            try
+            {
+                this.ZenzaiManager.SetOptions();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region 画像の再作成処理
+        /// <summary>
+        /// 画像の再作成処理
+        /// </summary>
+        public void GetOptions()
+        {
+            try
+            {
+                this.ZenzaiManager.GetOptions();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
         #region コンテンツのクリップボードへのコピー
         /// <summary>
         /// コンテンツのクリップボードへのコピー

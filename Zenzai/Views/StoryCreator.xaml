@@ -89,6 +89,13 @@
                                       ItemsSource="{Binding ZenzaiManager.WebUICtrl.Prompts.Items}"
                                       DisplayMemberPath="Name" SelectedItem="{Binding ZenzaiManager.WebUICtrl.Prompts.SelectedItem}"/>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" VerticalAlignment="Center" Text="Checkpoint"/>
+                            <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                            <ComboBox Margin="5" VerticalAlignment="Center" MinWidth="100" 
+                                      ItemsSource="{Binding ZenzaiManager.WebUICtrl.Prompts.Items}"
+                                      DisplayMemberPath="Name" SelectedItem="{Binding ZenzaiManager.WebUICtrl.CheckPoint}"/>
+                        </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="1" AutoGenerateColumns="False" MaxWidth="500" CanUserDeleteRows="True" CanUserAddRows="False" CanUserSortColumns="False"
                           ItemsSource="{Binding ZenzaiManager.ChatHistory.Items}" SelectedItem="{Binding ZenzaiManager.ChatHistory.SelectedItem}">
