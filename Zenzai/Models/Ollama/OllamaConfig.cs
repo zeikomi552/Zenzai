@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zenzai.Common.Utilities;
 using Zenzai.Models.Zenzai;
 
 namespace Zenzai.Models.Ollama

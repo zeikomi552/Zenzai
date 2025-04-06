@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl>
+        <TabControl DataContext="{Binding ZenzaiConfig}" >
             <TabItem Header="Ollama">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -27,11 +27,6 @@
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Port"/>
                         <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
                         <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.Port}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Role"/>
-                        <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
-                        <TextBox Margin="5" Width="300" VerticalAlignment="Center" Text="{Binding OllamaConfig.Role}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock TextAlignment="Right" Margin="5" Width="130" VerticalAlignment="Center" Text="Model"/>
@@ -125,8 +120,10 @@
         </TabControl>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" >
-            <Button Command="{Binding CloseDialogCommand}" CommandParameter="true" Content="OK" Width="75" Height="25" IsDefault="True" />
-            <Button Command="{Binding CloseDialogCommand}" CommandParameter="false" Content="Cancel" Width="75" Height="25" Margin="10,0,0,0" IsCancel="True" />
+            <Button Command="{Binding BackUpCommand}" CommandParameter="true" Margin="5" Content="Backup" Width="80" Height="25" IsDefault="True" />
+            <Button Command="{Binding RestoreCommand}" CommandParameter="true" Margin="5" Content="Restore" Width="80" Height="25" IsDefault="True" />
+            <Button Command="{Binding CloseDialogCommand}" CommandParameter="true" Margin="5" Content="OK" Width="75" Height="25" IsDefault="True" />
+            <Button Command="{Binding CloseDialogCommand}" CommandParameter="false" Margin="5" Content="Cancel" Width="75" Height="25" IsCancel="True" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -1,49 +1,88 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
+using Ollapi.api;
+using Prism.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Zenzai.Common.Utilities;
 using Zenzai.Models.A1111;
 using Zenzai.Models.Ollama;
+using Zenzai.Models.Zenzai;
 
 namespace Zenzai.ViewModels
 {
     public class SettingDialogViewModel : BindableBase, IDialogAware
     {
         #region IDialogAware
+        #region ダイアログを閉じるコマンド
+        /// <summary>
+        /// ダイアログを閉じるコマンド
+        /// </summary>
         private DelegateCommand<string>? _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+        #endregion
 
-        private string? _message;
-        public string? Message
-        {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
-        }
+        #region バックアップコマンド
+        /// <summary>
+        /// バックアップコマンド
+        /// </summary>
+        private DelegateCommand<string>? _BackUpCommand;
+        public DelegateCommand<string> BackUpCommand =>
+            _BackUpCommand ?? (_BackUpCommand = new DelegateCommand<string>(BackupSetting));
+        #endregion
 
-        private string _title = "Notification";
+        #region リストアコマンドの作成
+        private DelegateCommand<string>? _RestoreCommand;
+        public DelegateCommand<string> RestoreCommand =>
+            _RestoreCommand ?? (_RestoreCommand = new DelegateCommand<string>(RestoreSetting));
+        #endregion
+
+        #region ウィンドウタイトル
+        /// <summary>
+        /// ウィンドウタイトル
+        /// </summary>
+        private string _title = "Setting Window";
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
+        #endregion
 
+        #region クローズリクエスト
+        /// <summary>
+        /// クローズリクエスト
+        /// </summary>
         public DialogCloseListener RequestClose { get; }
+        public virtual void RaiseRequestClose(IDialogResult dialogResult)
+        {
+            RequestClose.Invoke(dialogResult);
+        }
+        #endregion
 
+        #region ダイアログを閉じる処理
+        /// <summary>
+        /// ダイアログを閉じる処理
+        /// </summary>
+        /// <param name="parameter">コマンドパラメータ true: OKボタン false:キャンセルボタン</param>
         protected virtual void CloseDialog(string parameter)
         {
             ButtonResult result = ButtonResult.None;
 
             if (parameter?.ToLower() == "true")
             {
-                this._OllamaCtrl.SetConfig(this.OllamaConfig);
-                this._WebUICtrl.SetConfig(this.WebUIConfig);
+                this._OllamaCtrl.SetConfig(this.ZenzaiConfig!.OllamaConfig);
+                this._WebUICtrl.SetConfig(this.ZenzaiConfig!.WebUIConfig);
 
-                SaveConfig<WebUIConfig>("Config", "webui.conf", (WebUIConfig)this.WebUIConfig);
-                SaveConfig<OllamaConfig>("Config", "ollama.conf", (OllamaConfig)this.OllamaConfig);
+                // Configファイルの保存処理
+                this.ZenzaiConfig!.SaveConfig();
 
                 result = ButtonResult.OK;
             }
@@ -54,110 +93,152 @@ namespace Zenzai.ViewModels
 
             RaiseRequestClose(new DialogResult(result));
         }
+        #endregion
 
-        public virtual void RaiseRequestClose(IDialogResult dialogResult)
-        {
-            RequestClose.Invoke(dialogResult);
-        }
-
+        #region クローズの可否を確認
+        /// <summary>
+        /// クローズの可否を確認
+        /// </summary>
+        /// <returns></returns>
         public virtual bool CanCloseDialog()
         {
             return true;
         }
+        #endregion
 
+        #region クローズ処理の実行
+        /// <summary>
+        /// クローズ処理の実行
+        /// </summary>
         public virtual void OnDialogClosed()
         {
 
         }
+        #endregion
 
+        #region ダイアログをOpen時の処理
+        /// <summary>
+        /// ダイアログをOpen時の処理
+        /// </summary>
+        /// <param name="parameters">コマンドパラメータ</param>
         public virtual void OnDialogOpened(IDialogParameters parameters)
         {
-            Message = parameters.GetValue<string>("message");
+
         }
         #endregion
+        #endregion
 
-
-        #region Ollama用Configデータ
+        #region ZenzaiConfig用マネージャー
         /// <summary>
-        /// Ollama用Configデータ
+        /// ZenzaiConfig用マネージャー
         /// </summary>
-        IOllamaConfig _OllamaConfig = new OllamaConfig();
+        ZenzaiConfigManager? _ZenzaiConfig;
         /// <summary>
-        /// Ollama用Configデータ
+        /// ZenzaiConfig用マネージャー
         /// </summary>
-        public IOllamaConfig OllamaConfig
+        public ZenzaiConfigManager? ZenzaiConfig
         {
             get
             {
-                return _OllamaConfig;
+                return _ZenzaiConfig;
             }
             set
             {
-                if (_OllamaConfig == null || !_OllamaConfig.Equals(value))
+                if (_ZenzaiConfig == null || !_ZenzaiConfig.Equals(value))
                 {
-                    _OllamaConfig = value;
-                    RaisePropertyChanged("OllamaConfig");
+                    _ZenzaiConfig = value;
+                    RaisePropertyChanged("ZenzaiConfig");
                 }
             }
         }
         #endregion
 
-        #region WebUI用Configデータ
+        #region Ollamaコントロール用オブジェクト
         /// <summary>
-        /// WebUI用Configデータ
+        /// Ollamaコントロール用オブジェクト
         /// </summary>
-        IWebUIConfig _WebUIConfig = new WebUIConfig();
-        /// <summary>
-        /// WebUI用Configデータ
-        /// </summary>
-        public IWebUIConfig WebUIConfig
-        {
-            get
-            {
-                return _WebUIConfig;
-            }
-            set
-            {
-                if (_WebUIConfig == null || !_WebUIConfig.Equals(value))
-                {
-                    _WebUIConfig = value;
-                    RaisePropertyChanged("WebUIConfig");
-                }
-            }
-        }
-        #endregion
-
         IOllamaControllerModel _OllamaCtrl;
+        #endregion
+
+        #region WebUIコントロール用オブジェクト
+        /// <summary>
+        /// WebUIコントロール用オブジェクト
+        /// </summary>
         IWebUIControllerModel _WebUICtrl;
+        #endregion
 
-
+        #region コンストラクタ
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="ollama">Ollamaコントロール用オブジェクト</param>
+        /// <param name="webui">WebUIコントロール用オブジェクト</param>
         public SettingDialogViewModel(IOllamaControllerModel ollama, IWebUIControllerModel webui)
         {
-            this.OllamaConfig.SetParameters(ollama);
-            this.WebUIConfig.SetParameters(webui);
+            this.ZenzaiConfig = new ZenzaiConfigManager(ollama, webui);
 
-            _OllamaCtrl = ollama;
-            _WebUICtrl = webui;
+            this._OllamaCtrl = ollama;
+            this._WebUICtrl = webui;
         }
+        #endregion
 
-
-        #region Wordpress用ファイルの読み込み
+        #region 設定ファイルのバックアップ処理
         /// <summary>
-        /// Wordpress用Configファイルの読み込み
+        /// 設定ファイルのバックアップ処理
         /// </summary>
-        public void SaveConfig<T>(string dir, string filename, T value) where T : new()
+        /// <param name="parameter"></param>
+        protected virtual void BackupSetting(string parameter)
         {
             try
             {
-                var tmp = new ConfigManager<T>(dir, filename, new T());
+                // ダイアログのインスタンスを生成
+                var dialog = new SaveFileDialog();
 
-                tmp.Item = value;
+                // ファイルの種類を設定
+                dialog.Filter = "Zenzai設定ファイル (*.znconf)|*.znconf";
 
-                tmp.SaveXML(); // XMLのセーブ
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+                    this._OllamaCtrl.SetConfig(this.ZenzaiConfig!.OllamaConfig);
+                    this._WebUICtrl.SetConfig(this.ZenzaiConfig!.WebUIConfig);
+                    this.ZenzaiConfig!.SaveZipConfig(dialog.FileName);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                ShowMessage.ShowErrorOK(ex.Message, "Error");
+            }
+
+        }
+        #endregion
+
+        #region 設定ファイルのリストア処理
+        /// <summary>
+        /// 設定ファイルのリストア処理
+        /// </summary>
+        /// <param name="parameter">コマンドパラメータ（未使用）</param>
+        public void RestoreSetting(string parameter)
+        {
+            try
+            {
+                // ダイアログのインスタンスを生成
+                var dialog = new OpenFileDialog();
+
+                // ファイルの種類を設定
+                dialog.Filter = "Zenzai設定ファイル (*.znconf)|*.znconf";
+
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+                    this.ZenzaiConfig!.LoadZipConfig(dialog.FileName);
+                    this._WebUICtrl.SetConfig(this.ZenzaiConfig!.WebUIConfig);
+                    this._OllamaCtrl.SetConfig(this.ZenzaiConfig!.OllamaConfig);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage.ShowErrorOK(ex.Message, "Error");
             }
         }
         #endregion
