@@ -19,9 +19,14 @@ namespace Zenzai.ViewModels
     public class SettingDialogViewModel : BindableBase, IDialogAware
     {
         #region IDialogAware
+        #region ダイアログを閉じるコマンド
+        /// <summary>
+        /// ダイアログを閉じるコマンド
+        /// </summary>
         private DelegateCommand<string>? _closeDialogCommand;
         public DelegateCommand<string> CloseDialogCommand =>
             _closeDialogCommand ?? (_closeDialogCommand = new DelegateCommand<string>(CloseDialog));
+        #endregion
 
         #region バックアップコマンド
         /// <summary>
@@ -38,15 +43,34 @@ namespace Zenzai.ViewModels
             _RestoreCommand ?? (_RestoreCommand = new DelegateCommand<string>(RestoreSetting));
         #endregion
 
-        private string _title = "Notification";
+        #region ウィンドウタイトル
+        /// <summary>
+        /// ウィンドウタイトル
+        /// </summary>
+        private string _title = "Setting Window";
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
+        #endregion
 
+        #region クローズリクエスト
+        /// <summary>
+        /// クローズリクエスト
+        /// </summary>
         public DialogCloseListener RequestClose { get; }
+        public virtual void RaiseRequestClose(IDialogResult dialogResult)
+        {
+            RequestClose.Invoke(dialogResult);
+        }
+        #endregion
 
+        #region ダイアログを閉じる処理
+        /// <summary>
+        /// ダイアログを閉じる処理
+        /// </summary>
+        /// <param name="parameter">コマンドパラメータ true: OKボタン false:キャンセルボタン</param>
         protected virtual void CloseDialog(string parameter)
         {
             ButtonResult result = ButtonResult.None;
@@ -68,27 +92,39 @@ namespace Zenzai.ViewModels
 
             RaiseRequestClose(new DialogResult(result));
         }
+        #endregion
 
-
-        public virtual void RaiseRequestClose(IDialogResult dialogResult)
-        {
-            RequestClose.Invoke(dialogResult);
-        }
-
+        #region クローズの可否を確認
+        /// <summary>
+        /// クローズの可否を確認
+        /// </summary>
+        /// <returns></returns>
         public virtual bool CanCloseDialog()
         {
             return true;
         }
+        #endregion
 
+        #region クローズ処理の実行
+        /// <summary>
+        /// クローズ処理の実行
+        /// </summary>
         public virtual void OnDialogClosed()
         {
 
         }
+        #endregion
 
+        #region ダイアログをOpen時の処理
+        /// <summary>
+        /// ダイアログをOpen時の処理
+        /// </summary>
+        /// <param name="parameters">コマンドパラメータ</param>
         public virtual void OnDialogOpened(IDialogParameters parameters)
         {
 
         }
+        #endregion
         #endregion
 
 
@@ -142,10 +178,26 @@ namespace Zenzai.ViewModels
         }
         #endregion
 
+        #region Ollamaコントロール用オブジェクト
+        /// <summary>
+        /// Ollamaコントロール用オブジェクト
+        /// </summary>
         IOllamaControllerModel _OllamaCtrl;
+        #endregion
+
+        #region WebUIコントロール用オブジェクト
+        /// <summary>
+        /// WebUIコントロール用オブジェクト
+        /// </summary>
         IWebUIControllerModel _WebUICtrl;
+        #endregion
 
-
+        #region コンストラクタ
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="ollama">Ollamaコントロール用オブジェクト</param>
+        /// <param name="webui">WebUIコントロール用オブジェクト</param>
         public SettingDialogViewModel(IOllamaControllerModel ollama, IWebUIControllerModel webui)
         {
             this.OllamaConfig.SetParameters(ollama);
@@ -154,11 +206,11 @@ namespace Zenzai.ViewModels
             _OllamaCtrl = ollama;
             _WebUICtrl = webui;
         }
+        #endregion
 
-
-        #region Wordpress用ファイルの読み込み
+        #region Configファイルの読み込み
         /// <summary>
-        /// Wordpress用Configファイルの読み込み
+        /// Configファイルの読み込み
         /// </summary>
         public void SaveConfig<T>(string dir, string filename, T value) where T : new()
         {
@@ -305,7 +357,6 @@ namespace Zenzai.ViewModels
             }
         }
         #endregion
-
 
         #region Wordpress用ファイルの読み込み
         /// <summary>
