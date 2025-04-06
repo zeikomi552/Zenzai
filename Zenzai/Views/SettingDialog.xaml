@@ -9,7 +9,7 @@
              xmlns:enum="clr-namespace:Stdapi.Enums;assembly=Stdapi"
              xmlns:prism="http://prismlibrary.com/" Background="{DynamicResource MahApps.Brushes.Control.Background}"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type vm:SettingDialogViewModel}}">
-    <Grid x:Name="LayoutRoot" Margin="5">
+    <Grid x:Name="LayoutRoot" Margin="5" Width="1200" Height="800">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -116,7 +116,7 @@
                 <DataGrid AutoGenerateColumns="False" Margin="5" ItemsSource="{Binding WebUIConfig.Prompts.Items}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Width="200" Header="Prompt" Binding="{Binding Prompt}"/>
+                        <DataGridTextColumn Width="*" Header="Prompt" Binding="{Binding Prompt}"/>
                         <DataGridTextColumn Width="200" Header="NegativePrompt" Binding="{Binding NegativePrompt}"/>
                     </DataGrid.Columns>
                 </DataGrid>
