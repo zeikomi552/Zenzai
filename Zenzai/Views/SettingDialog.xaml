@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl>
+        <TabControl DataContext="{Binding ZenzaiConfig}" >
             <TabItem Header="Ollama">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
