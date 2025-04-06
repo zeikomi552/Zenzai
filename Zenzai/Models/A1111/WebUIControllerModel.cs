@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Stdapi;
+using Stdapi.Models.Get;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,6 +115,45 @@ namespace Zenzai.Models.A1111
         }
         #endregion
 
+        #region Promptの実行処理
+        /// <summary>
+        /// Promptの実行処理
+        /// </summary>
+        public async Task<bool> SetCheckpoint(string checkpoint, int clip_CLIP_stop_at_last_layers)
+        {
+            try
+            {
+                string url = this.WebuiUri;
+                return await this.WebUI.Request.PostOptions(url, checkpoint, clip_CLIP_stop_at_last_layers);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage.ShowErrorOK(ex.Message, "Error");
+                return false;
+            }
+        }
+        #endregion
+
+        #region Promptの実行処理
+        /// <summary>
+        /// Promptの実行処理
+        /// </summary>
+        public async Task<bool> GetCheckPointList()
+        {
+            try
+            {
+                StdClient client = new StdClient();
+                string url = this.WebuiUri;
+                this.CheckPointList = new ObservableCollection<GetSdModels>(await client.SdModelsRequest(url));
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        #endregion
+
         #region WebUIの初期化処理
         /// <summary>
         /// WebUIの初期化処理
@@ -139,6 +181,7 @@ namespace Zenzai.Models.A1111
             this.WebuiUri = config.WebuiUri;
             this.WebuiOutputDirectory = config.WebuiOutputDirectory;
             this.WebuiCurrentDirectory = config.WebuiCurrentDirectory;
+            this.CheckPoint = config.CheckPoint;
             this.Prompts = config.Prompts;
             this.Steps = config.Steps;
             this.Width = config.Width;

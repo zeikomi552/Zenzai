@@ -43,7 +43,7 @@ namespace Zenzai.Models.Zenzai
             }
         }
         #endregion
-
+        
         #region WebUI用コントローラー
         /// <summary>
         /// WebUI用コントローラー
@@ -458,6 +458,48 @@ namespace Zenzai.Models.Zenzai
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        public async void SetOptions()
+        {
+            try
+            {
+                if (this.WebUICtrl.CheckPoint == null 
+                    || string.IsNullOrEmpty(this.WebUICtrl.CheckPoint.ModelName))
+                    return;
+
+                var ret = await this.WebUICtrl.SetCheckpoint(this.WebUICtrl.CheckPoint.ModelName, this.WebUICtrl.CLIPStopAtLastLayers);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region 画像生成の実行処理(WebUIを使用)
+        /// <summary>
+        /// 画像生成の実行処理(WebUIを使用)
+        /// </summary>
+        public async void GetCheckPointList()
+        {
+            bool ret = false;
+            while (!ret)
+            {
+                try
+                {
+                    ret = await this.WebUICtrl.GetCheckPointList();
+                }
+                catch
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
             }
         }
         #endregion

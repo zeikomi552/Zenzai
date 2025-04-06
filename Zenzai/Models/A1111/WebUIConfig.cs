@@ -1,12 +1,15 @@
 ﻿using Stdapi.Enums;
+using Stdapi.Models.Get;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Zenzai.Models.A1111
 {
@@ -108,6 +111,82 @@ namespace Zenzai.Models.A1111
                 {
                     _Prompts = value;
                     RaisePropertyChanged("Prompts");
+                }
+            }
+        }
+        #endregion
+        #region チェックポイントリスト
+        /// <summary>
+        /// チェックポイントリスト
+        /// </summary>
+        [XmlIgnore]
+        ObservableCollection<GetSdModels> _CheckPointList = new ObservableCollection<GetSdModels>();
+        /// <summary>
+        /// チェックポイントリスト
+        /// </summary>
+        public ObservableCollection<GetSdModels> CheckPointList
+        {
+            get
+            {
+                return _CheckPointList;
+            }
+            set
+            {
+                if (_CheckPointList == null || !_CheckPointList.Equals(value))
+                {
+                    _CheckPointList = value;
+                    RaisePropertyChanged("CheckPointList");
+                }
+            }
+        }
+        #endregion
+
+
+        #region 使用するモデル
+        /// <summary>
+        /// 使用するモデル
+        /// </summary>
+        GetSdModels _CheckPoint = new GetSdModels();
+        /// <summary>
+        /// 使用するモデル
+        /// </summary>
+        public GetSdModels CheckPoint
+        {
+            get
+            {
+                return _CheckPoint;
+            }
+            set
+            {
+                if (_CheckPoint == null || !_CheckPoint.Equals(value))
+                {
+                    _CheckPoint = value;
+                    RaisePropertyChanged("CheckPoint");
+                }
+            }
+        }
+        #endregion
+
+        #region CLIP_stop_at_last_layers
+        /// <summary>
+        /// CLIP_stop_at_last_layers
+        /// </summary>
+        int _CLIPStopAtLastLayers = 2;
+        /// <summary>
+        /// CLIP_stop_at_last_layers
+        /// </summary>
+        public int CLIPStopAtLastLayers
+        {
+            get
+            {
+                return _CLIPStopAtLastLayers;
+            }
+            set
+            {
+                if (!_CLIPStopAtLastLayers.Equals(value))
+                {
+                    _CLIPStopAtLastLayers = value;
+                    RaisePropertyChanged("CLIPStopAtLastLayers");
                 }
             }
         }
