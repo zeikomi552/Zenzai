@@ -38,13 +38,6 @@ namespace Zenzai.ViewModels
             _RestoreCommand ?? (_RestoreCommand = new DelegateCommand<string>(RestoreSetting));
         #endregion
 
-        private string? _message;
-        public string? Message
-        {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
-        }
-
         private string _title = "Notification";
         public string Title
         {
@@ -94,7 +87,7 @@ namespace Zenzai.ViewModels
 
         public virtual void OnDialogOpened(IDialogParameters parameters)
         {
-            Message = parameters.GetValue<string>("message");
+
         }
         #endregion
 
