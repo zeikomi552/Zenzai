@@ -171,7 +171,7 @@ namespace Zenzai.Models.A1111
         /// <summary>
         /// CLIP_stop_at_last_layers
         /// </summary>
-        int _CLIPStopAtLastLayers = 2;
+        int _CLIPStopAtLastLayers = 1;
         /// <summary>
         /// CLIP_stop_at_last_layers
         /// </summary>

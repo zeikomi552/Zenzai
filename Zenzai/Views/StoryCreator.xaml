@@ -89,6 +89,11 @@
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
                             </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5" VerticalAlignment="Center" Text="ClipSkip"/>
+                                <TextBlock Margin="5" VerticalAlignment="Center" Text=":"/>
+                                <TextBox VerticalAlignment="Center" TextAlignment="Center" Width="100" Text="{Binding ZenzaiManager.WebUICtrl.CLIPStopAtLastLayers}"/>
+                            </StackPanel>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
